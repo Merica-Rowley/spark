@@ -26,12 +26,17 @@ jobs:
           npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_PUBLIC_KEY: ${{ secrets.VITE_SUPABASE_PUBLIC_KEY }}
 
       - name: Update pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+      - name: Debug env
+        run: echo "URL is $VITE_SUPABASE_URL"
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
   deploy:
     needs: build
     permissions:
