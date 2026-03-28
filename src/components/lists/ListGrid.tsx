@@ -1,0 +1,20 @@
+import { type ListWithMeta } from "../../types";
+import ListCard from "./ListCard";
+
+type Props = {
+  lists: ListWithMeta[];
+};
+
+export default function ListGrid({ lists }: Props) {
+  if (lists.length === 0) {
+    return <p>You don't have any lists yet. Create one to get started!</p>;
+  }
+
+  return (
+    <div>
+      {lists.map((list) => (
+        <ListCard key={list.id} list={list} />
+      ))}
+    </div>
+  );
+}
