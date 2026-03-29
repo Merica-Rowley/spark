@@ -22,3 +22,27 @@ export type ListWithMeta = List & {
   is_starred: boolean;
   role: ListRole;
 };
+
+export type ListItem = {
+  id: string;
+  list_id: string;
+  content: string;
+  position: number;
+  is_completed: boolean;
+  completed_at: string | null;
+  completed_by: string | null;
+  created_at: string;
+};
+
+export type ListMemberWithProfile = {
+  user_id: string;
+  role: ListRole;
+  username: string;
+};
+
+export type ListDetail = {
+  list: List;
+  items: ListItem[];
+  members: ListMemberWithProfile[];
+  role: ListRole;
+};
