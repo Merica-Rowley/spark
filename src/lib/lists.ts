@@ -27,3 +27,9 @@ export async function getUserLists(): Promise<ListWithMeta[]> {
       return 0;
     });
 }
+
+export async function deleteList(listId: string): Promise<void> {
+  const { error } = await supabase.from("lists").delete().eq("id", listId);
+
+  if (error) throw error;
+}

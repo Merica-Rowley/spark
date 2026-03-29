@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUserLists } from "../lib/lists";
+import { getUserLists, deleteList } from "../lib/lists";
 import { type ListWithMeta } from "../types";
 
 export function useLists() {
@@ -24,5 +24,14 @@ export function useLists() {
     }
   }
 
-  return { lists, loading, error, refetch: fetchLists };
+  async function removeList(listId: string) {
+    try {
+      await deleteList(listId);
+      setLists((prev) => prev.filter((list) => list.id !== listId));
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to delete list");
+    }
+  }
+
+  return { lists, loading, error, refetch: fetchLists, removeList };
 }

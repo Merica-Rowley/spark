@@ -3,9 +3,10 @@ import ListCard from "./ListCard";
 
 type Props = {
   lists: ListWithMeta[];
+  onDeleteList: (listId: string) => Promise<void>;
 };
 
-export default function ListGrid({ lists }: Props) {
+export default function ListGrid({ lists, onDeleteList }: Props) {
   if (lists.length === 0) {
     return <p>You don't have any lists yet. Create one to get started!</p>;
   }
@@ -13,7 +14,7 @@ export default function ListGrid({ lists }: Props) {
   return (
     <div>
       {lists.map((list) => (
-        <ListCard key={list.id} list={list} />
+        <ListCard key={list.id} list={list} onDeleteList={onDeleteList} />
       ))}
     </div>
   );
