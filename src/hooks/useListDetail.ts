@@ -68,6 +68,30 @@ export function useListDetail(listId: string) {
     }
   }
 
+  async function completeItem(itemId: string) {
+    try {
+      const { error } = await supabase.rpc("complete_item", {
+        p_item_id: itemId,
+      });
+      if (error) throw error;
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to complete item");
+    }
+  }
+
+  async function uncompleteItem(itemId: string) {
+    try {
+      const { error } = await supabase.rpc("uncomplete_item", {
+        p_item_id: itemId,
+      });
+      if (error) throw error;
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to uncomplete item");
+    }
+  }
+
   return {
     listDetail,
     loading,
@@ -75,5 +99,7 @@ export function useListDetail(listId: string) {
     refetch: fetchListDetail,
     addItem,
     deleteItem,
+    completeItem,
+    uncompleteItem,
   };
 }

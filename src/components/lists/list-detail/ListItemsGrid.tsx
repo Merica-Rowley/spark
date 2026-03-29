@@ -7,13 +7,17 @@ type Props = {
   role: ListRole;
   onAddItem: (content: string) => Promise<void>;
   onDeleteItem: (itemId: string) => Promise<void>;
+  onItemCheck: (item: ListItem) => Promise<void>;
+  onCompletedItemClick: (item: ListItem) => void;
 };
 
 export default function ListItemsGrid({
   items,
-  //   role,
+  // role,
   onAddItem,
   onDeleteItem,
+  onItemCheck,
+  onCompletedItemClick,
 }: Props) {
   const [newItemContent, setNewItemContent] = useState("");
   const [adding, setAdding] = useState(false);
@@ -21,7 +25,6 @@ export default function ListItemsGrid({
 
   const handleAdd = async () => {
     if (!newItemContent.trim()) return;
-
     try {
       setAdding(true);
       setError(null);
@@ -44,7 +47,13 @@ export default function ListItemsGrid({
         <p>No items yet. Add one below!</p>
       ) : (
         items.map((item) => (
-          <ListItemCard key={item.id} item={item} onDelete={onDeleteItem} />
+          <ListItemCard
+            key={item.id}
+            item={item}
+            onDelete={onDeleteItem}
+            onItemCheck={onItemCheck}
+            onCompletedItemClick={onCompletedItemClick}
+          />
         ))
       )}
 
