@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type ListWithMeta } from "../../types";
+import ListImage from "../common/ListImage";
 
 type Props = {
   list: ListWithMeta;
-  onDeleteList: (listId: string) => Promise<void>;
+  onDeleteList: (listId: string, imagePath: string | null) => Promise<void>;
   onToggleStar: (listId: string, currentlyStarred: boolean) => Promise<void>;
 };
 
@@ -13,9 +14,9 @@ export default function ListCard({ list, onDeleteList, onToggleStar }: Props) {
   const [starring, setStarring] = useState(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // prevent navigating to the list when clicking delete
+    e.stopPropagation();
     if (!confirm("Are you sure you want to delete this list?")) return;
-    await onDeleteList(list.id);
+    await onDeleteList(list.id, list.image_url);
   };
 
   const handleStar = async (e: React.MouseEvent) => {
@@ -30,6 +31,7 @@ export default function ListCard({ list, onDeleteList, onToggleStar }: Props) {
 
   return (
     <div onClick={() => navigate(`/lists/${list.id}`)}>
+      <ListImage imagePath={list.image_url} alt={list.title} />
       <button onClick={handleStar} disabled={starring}>
         {list.is_starred ? "⭐" : "☆"}
       </button>

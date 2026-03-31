@@ -4,6 +4,7 @@ import {
   type ListMemberWithProfile,
   type ListRole,
 } from "../../../types";
+import ListImage from "../../common/ListImage";
 
 type Props = {
   list: List;
@@ -33,6 +34,7 @@ export default function ListHeader({
 
   return (
     <div>
+      <ListImage imagePath={list.image_url} alt={list.title} />
       <div>
         <h1>{list.title}</h1>
         <button onClick={handleStar} disabled={starring}>

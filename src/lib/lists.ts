@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import { deleteImage } from "./storage";
 import { type ListWithMeta } from "../types";
 
 export async function getUserLists(): Promise<ListWithMeta[]> {
@@ -28,7 +29,14 @@ export async function getUserLists(): Promise<ListWithMeta[]> {
     });
 }
 
-export async function deleteList(listId: string): Promise<void> {
+export async function deleteList(
+  listId: string,
+  imagePath: string | null,
+): Promise<void> {
+  if (imagePath) {
+    await deleteImage(imagePath);
+  }
+
   const { error } = await supabase.from("lists").delete().eq("id", listId);
 
   if (error) throw error;

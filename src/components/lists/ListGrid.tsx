@@ -3,7 +3,7 @@ import ListCard from "./ListCard";
 
 type Props = {
   lists: ListWithMeta[];
-  onDeleteList: (listId: string) => Promise<void>;
+  onDeleteList: (listId: string, imagePath: string | null) => Promise<void>;
   onToggleStar: (listId: string, currentlyStarred: boolean) => Promise<void>;
 };
 

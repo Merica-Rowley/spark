@@ -24,9 +24,9 @@ export function useLists() {
     }
   }
 
-  async function removeList(listId: string) {
+  async function removeList(listId: string, imagePath: string | null) {
     try {
-      await deleteList(listId);
+      await deleteList(listId, imagePath);
       setLists((prev) => prev.filter((list) => list.id !== listId));
     } catch (err) {
       throw err instanceof Error ? err : new Error("Failed to delete list");
