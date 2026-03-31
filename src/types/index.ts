@@ -42,6 +42,7 @@ export type ListMemberWithProfile = {
 
 export type ListDetail = {
   list: List;
+  is_starred: boolean;
   items: ListItem[];
   members: ListMemberWithProfile[];
   role: ListRole;

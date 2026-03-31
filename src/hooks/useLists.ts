@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUserLists, deleteList } from "../lib/lists";
+import { getUserLists, deleteList, starList, unstarList } from "../lib/lists";
 import { type ListWithMeta } from "../types";
 
 export function useLists() {
@@ -33,5 +33,32 @@ export function useLists() {
     }
   }
 
-  return { lists, loading, error, refetch: fetchLists, removeList };
+  async function toggleStar(listId: string, currentlyStarred: boolean) {
+    try {
+      if (currentlyStarred) {
+        await unstarList(listId);
+      } else {
+        await starList(listId);
+      }
+
+      // update local state directly rather than refetching
+      setLists((prev) =>
+        prev
+          .map((list) =>
+            list.id === listId
+              ? { ...list, is_starred: !currentlyStarred }
+              : list,
+          )
+          .sort((a, b) => {
+            if (a.is_starred && !b.is_starred) return -1;
+            if (!a.is_starred && b.is_starred) return 1;
+            return 0;
+          }),
+      );
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to update star");
+    }
+  }
+
+  return { lists, loading, error, refetch: fetchLists, removeList, toggleStar };
 }

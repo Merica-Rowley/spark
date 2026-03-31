@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   type List,
   type ListMemberWithProfile,
@@ -8,12 +9,36 @@ type Props = {
   list: List;
   members: ListMemberWithProfile[];
   role: ListRole;
+  isStarred: boolean;
+  onToggleStar: () => Promise<void>;
 };
 
-export default function ListHeader({ list, members, role }: Props) {
+export default function ListHeader({
+  list,
+  members,
+  role,
+  isStarred,
+  onToggleStar,
+}: Props) {
+  const [starring, setStarring] = useState(false);
+
+  const handleStar = async () => {
+    try {
+      setStarring(true);
+      await onToggleStar();
+    } finally {
+      setStarring(false);
+    }
+  };
+
   return (
     <div>
-      <h1>{list.title}</h1>
+      <div>
+        <h1>{list.title}</h1>
+        <button onClick={handleStar} disabled={starring}>
+          {isStarred ? "⭐" : "☆"}
+        </button>
+      </div>
       <p>
         {members.map((m, i) => (
           <span key={m.user_id}>

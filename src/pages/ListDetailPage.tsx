@@ -18,6 +18,7 @@ export default function ListDetailPage() {
     deleteItem,
     completeItem,
     uncompleteItem,
+    toggleStar,
   } = useListDetail(id!);
 
   const [postModalItem, setPostModalItem] = useState<ListItem | null>(null);
@@ -45,6 +46,8 @@ export default function ListDetailPage() {
         list={listDetail.list}
         members={listDetail.members}
         role={listDetail.role}
+        isStarred={listDetail.is_starred}
+        onToggleStar={() => toggleStar(listDetail.is_starred)}
       />
       <ListItemsGrid
         items={listDetail.items}

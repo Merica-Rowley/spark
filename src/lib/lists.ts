@@ -33,3 +33,13 @@ export async function deleteList(listId: string): Promise<void> {
 
   if (error) throw error;
 }
+
+export async function starList(listId: string): Promise<void> {
+  const { error } = await supabase.rpc("star_list", { p_list_id: listId });
+  if (error) throw error;
+}
+
+export async function unstarList(listId: string): Promise<void> {
+  const { error } = await supabase.rpc("unstar_list", { p_list_id: listId });
+  if (error) throw error;
+}

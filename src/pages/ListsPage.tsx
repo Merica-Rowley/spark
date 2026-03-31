@@ -6,7 +6,7 @@ import CreateListModal from "../components/lists/CreateListModal";
 import { useState } from "react";
 
 export default function ListsPage() {
-  const { lists, loading, error, refetch, removeList } = useLists();
+  const { lists, loading, error, refetch, removeList, toggleStar } = useLists();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
@@ -26,7 +26,11 @@ export default function ListsPage() {
         <button onClick={handleSignOut}>Sign Out</button>
       </div>
 
-      <ListGrid lists={lists} onDeleteList={removeList} />
+      <ListGrid
+        lists={lists}
+        onDeleteList={removeList}
+        onToggleStar={toggleStar}
+      />
 
       {showModal && (
         <CreateListModal
