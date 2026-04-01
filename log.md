@@ -9,4 +9,4 @@
 | 3/27 | Create logo, add some RLS policies, add Create List functions, CI deployment        | 2.5 hours |
 | 3/28 | Create/delete list, display user lists, add/remove items from list, check off items | 2.5 hours |
 | 3/30 | Star/unstar lists                                                                   | 0.5 hours |
-| 3/31 | List images                                                                         | 1.5 hours |
+| 3/31 | List images, update list image and title                                            | 2 hours   |
