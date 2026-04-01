@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
-import { starList, unstarList } from "../lib/lists";
+import { starList, unstarList, updateList } from "../lib/lists";
 import { type ListDetail } from "../types";
 
 export function useListDetail(listId: string) {
@@ -93,6 +93,25 @@ export function useListDetail(listId: string) {
     }
   }
 
+  async function updateListDetails(
+    title: string,
+    newImageFile: File | null,
+    resetImage: boolean = false,
+  ) {
+    try {
+      await updateList(
+        listId,
+        title,
+        listDetail?.list.image_url ?? null,
+        newImageFile,
+        resetImage,
+      );
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to update list");
+    }
+  }
+
   async function toggleStar(currentlyStarred: boolean) {
     try {
       if (currentlyStarred) {
@@ -116,5 +135,6 @@ export function useListDetail(listId: string) {
     completeItem,
     uncompleteItem,
     toggleStar,
+    updateListDetails,
   };
 }

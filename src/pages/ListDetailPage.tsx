@@ -6,6 +6,7 @@ import ListHeader from "../components/lists/list-detail/ListHeader";
 import ListItemsGrid from "../components/lists/list-detail/ListItemsGrid";
 import CreatePostModal from "../components/lists/list-detail/CreatePostModal";
 import CompletedItemModal from "../components/lists/list-detail/CompletedItemModal";
+import EditListModal from "../components/lists/list-detail/EditListModal";
 
 export default function ListDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -19,12 +20,14 @@ export default function ListDetailPage() {
     completeItem,
     uncompleteItem,
     toggleStar,
+    updateListDetails,
   } = useListDetail(id!);
 
   const [postModalItem, setPostModalItem] = useState<ListItem | null>(null);
   const [completedModalItem, setCompletedModalItem] = useState<ListItem | null>(
     null,
   );
+  const [showEditModal, setShowEditModal] = useState(false);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -48,6 +51,7 @@ export default function ListDetailPage() {
         role={listDetail.role}
         isStarred={listDetail.is_starred}
         onToggleStar={() => toggleStar(listDetail.is_starred)}
+        onEdit={() => setShowEditModal(true)}
       />
       <ListItemsGrid
         items={listDetail.items}
@@ -78,6 +82,16 @@ export default function ListDetailPage() {
           onCreatePost={() => {
             setPostModalItem(completedModalItem);
             setCompletedModalItem(null);
+          }}
+        />
+      )}
+      {showEditModal && (
+        <EditListModal
+          list={listDetail.list}
+          onClose={() => setShowEditModal(false)}
+          onSaved={async (title, imageFile, resetImage) => {
+            await updateListDetails(title, imageFile, resetImage);
+            setShowEditModal(false);
           }}
         />
       )}

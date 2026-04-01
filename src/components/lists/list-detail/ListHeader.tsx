@@ -12,6 +12,7 @@ type Props = {
   role: ListRole;
   isStarred: boolean;
   onToggleStar: () => Promise<void>;
+  onEdit: () => void;
 };
 
 export default function ListHeader({
@@ -20,6 +21,7 @@ export default function ListHeader({
   role,
   isStarred,
   onToggleStar,
+  onEdit,
 }: Props) {
   const [starring, setStarring] = useState(false);
 
@@ -40,6 +42,7 @@ export default function ListHeader({
         <button onClick={handleStar} disabled={starring}>
           {isStarred ? "⭐" : "☆"}
         </button>
+        {role === "owner" && <button onClick={onEdit}>Edit</button>}
       </div>
       <p>
         {members.map((m, i) => (

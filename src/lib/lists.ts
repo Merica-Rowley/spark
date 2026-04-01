@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { deleteImage } from "./storage";
+import { deleteImage, uploadListImage } from "./storage";
 import { type ListWithMeta } from "../types";
 
 export async function getUserLists(): Promise<ListWithMeta[]> {
@@ -38,6 +38,35 @@ export async function deleteList(
   }
 
   const { error } = await supabase.from("lists").delete().eq("id", listId);
+
+  if (error) throw error;
+}
+
+export async function updateList(
+  listId: string,
+  title: string,
+  currentImagePath: string | null,
+  newImageFile: File | null,
+  resetImage: boolean = false,
+): Promise<void> {
+  let imagePath = currentImagePath;
+
+  if (resetImage) {
+    // delete current image if it isn't already the default
+    if (currentImagePath) await deleteImage(currentImagePath);
+    imagePath = null;
+  } else if (newImageFile) {
+    // delete old image and upload new one
+    if (currentImagePath) await deleteImage(currentImagePath);
+    imagePath = await uploadListImage(listId, newImageFile);
+  }
+
+  const { error } = await supabase.rpc("update_list", {
+    p_list_id: listId,
+    p_title: title,
+    p_image_path: imagePath,
+    p_reset_image: resetImage,
+  });
 
   if (error) throw error;
 }
