@@ -1,3 +1,5 @@
+// Lists
+
 export type ListRole = "owner" | "member";
 
 export type List = {
@@ -46,4 +48,23 @@ export type ListDetail = {
   items: ListItem[];
   members: ListMemberWithProfile[];
   role: ListRole;
+};
+
+// Friends
+
+export type Friend = {
+  friend_id: string;
+  username: string;
+  avatar_url: string | null;
+  created_at: string;
+};
+
+export type FriendInvite = {
+  id: string;
+  invited_by: string;
+  invite_code: string;
+  accepted_by: string | null;
+  accepted_at: string | null;
+  created_at: string;
+  expires_at: string;
 };

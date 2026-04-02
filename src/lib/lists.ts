@@ -14,7 +14,7 @@ export async function getUserLists(): Promise<ListWithMeta[]> {
     )
     .order("updated_at", { ascending: false });
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
   return data
     .map((list) => ({
@@ -39,7 +39,7 @@ export async function deleteList(
 
   const { error } = await supabase.from("lists").delete().eq("id", listId);
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 }
 
 export async function updateList(
@@ -68,15 +68,15 @@ export async function updateList(
     p_reset_image: resetImage,
   });
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 }
 
 export async function starList(listId: string): Promise<void> {
   const { error } = await supabase.rpc("star_list", { p_list_id: listId });
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 }
 
 export async function unstarList(listId: string): Promise<void> {
   const { error } = await supabase.rpc("unstar_list", { p_list_id: listId });
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 }

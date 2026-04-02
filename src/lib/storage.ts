@@ -14,7 +14,7 @@ export async function uploadListImage(
     .from("images")
     .upload(filePath, file, { upsert: true });
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
   return filePath;
 }
@@ -24,7 +24,7 @@ export async function getSignedUrl(path: string): Promise<string> {
     .from("images")
     .createSignedUrl(path, 3600); // expires in 1 hour
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
   return data.signedUrl;
 }
 
@@ -34,5 +34,5 @@ export async function deleteImage(imagePath: string): Promise<void> {
 
   const { error } = await supabase.storage.from("images").remove([imagePath]);
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 }
