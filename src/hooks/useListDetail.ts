@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
-import { starList, unstarList, updateList } from "../lib/lists";
-import { type ListDetail } from "../types";
+import {
+  starList,
+  unstarList,
+  updateList,
+  addListMember,
+  removeListMember,
+  transferListOwnership,
+  getFriendsNotOnList,
+} from "../lib/lists";
+import { type Friend, type ListDetail } from "../types";
 
 export function useListDetail(listId: string) {
   const [listDetail, setListDetail] = useState<ListDetail | null>(null);
@@ -125,6 +133,43 @@ export function useListDetail(listId: string) {
     }
   }
 
+  async function addMember(userId: string) {
+    try {
+      await addListMember(listId, userId);
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to add member");
+    }
+  }
+
+  async function removeMember(userId: string) {
+    try {
+      await removeListMember(listId, userId);
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to remove member");
+    }
+  }
+
+  async function transferOwnership(newOwnerId: string) {
+    try {
+      await transferListOwnership(listId, newOwnerId);
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error
+        ? err
+        : new Error("Failed to transfer ownership");
+    }
+  }
+
+  async function getAvailableFriends(): Promise<Friend[]> {
+    try {
+      return await getFriendsNotOnList(listId);
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to fetch friends");
+    }
+  }
+
   return {
     listDetail,
     loading,
@@ -136,5 +181,9 @@ export function useListDetail(listId: string) {
     uncompleteItem,
     toggleStar,
     updateListDetails,
+    addMember,
+    removeMember,
+    transferOwnership,
+    getAvailableFriends,
   };
 }

@@ -1,6 +1,6 @@
 import { supabase } from "./supabaseClient";
 import { deleteImage, uploadListImage } from "./storage";
-import { type ListWithMeta } from "../types";
+import { type Friend, type ListWithMeta } from "../types";
 
 export async function getUserLists(): Promise<ListWithMeta[]> {
   const { data, error } = await supabase
@@ -78,5 +78,46 @@ export async function starList(listId: string): Promise<void> {
 
 export async function unstarList(listId: string): Promise<void> {
   const { error } = await supabase.rpc("unstar_list", { p_list_id: listId });
+  if (error) throw new Error(error.message);
+}
+
+export async function getFriendsNotOnList(listId: string): Promise<Friend[]> {
+  const { data, error } = await supabase.rpc("get_friends_not_on_list", {
+    p_list_id: listId,
+  });
+  if (error) throw new Error(error.message);
+  return data ?? [];
+}
+
+export async function addListMember(
+  listId: string,
+  userId: string,
+): Promise<void> {
+  const { error } = await supabase.rpc("add_list_member", {
+    p_list_id: listId,
+    p_user_id: userId,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function removeListMember(
+  listId: string,
+  userId: string,
+): Promise<void> {
+  const { error } = await supabase.rpc("remove_list_member", {
+    p_list_id: listId,
+    p_user_id: userId,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function transferListOwnership(
+  listId: string,
+  newOwnerId: string,
+): Promise<void> {
+  const { error } = await supabase.rpc("transfer_list_ownership", {
+    p_list_id: listId,
+    p_new_owner_id: newOwnerId,
+  });
   if (error) throw new Error(error.message);
 }

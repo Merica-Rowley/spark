@@ -40,6 +40,7 @@ export type ListMemberWithProfile = {
   user_id: string;
   role: ListRole;
   username: string;
+  avatar_url: string | null;
 };
 
 export type ListDetail = {

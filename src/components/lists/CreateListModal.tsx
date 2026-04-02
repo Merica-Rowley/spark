@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { uploadListImage } from "../../lib/storage";
+import { getFriends } from "../../lib/friends";
+import { addListMember } from "../../lib/lists";
+import { type Friend } from "../../types";
+import MemberPicker from "./MemberPicker";
 
 type Props = {
   onClose: () => void;
@@ -12,6 +16,20 @@ export default function CreateListModal({ onClose, onCreated }: Props) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
+
+  useEffect(() => {
+    getFriends().then(setFriends).catch(console.error);
+  }, []);
+
+  const handleToggleFriend = (friend: Friend) => {
+    setSelectedFriends((prev) =>
+      prev.some((f) => f.friend_id === friend.friend_id)
+        ? prev.filter((f) => f.friend_id !== friend.friend_id)
+        : [...prev, friend],
+    );
+  };
 
   const handleCreate = async () => {
     if (!title.trim()) return;
@@ -44,6 +62,12 @@ export default function CreateListModal({ onClose, onCreated }: Props) {
         if (updateError) throw updateError;
       }
 
+      await Promise.all(
+        selectedFriends.map((friend) =>
+          addListMember(listId, friend.friend_id),
+        ),
+      );
+
       onCreated();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create list");
@@ -74,6 +98,17 @@ export default function CreateListModal({ onClose, onCreated }: Props) {
           onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
         />
       </div>
+
+      {friends.length > 0 && (
+        <div>
+          <label>Add collaborators (optional)</label>
+          <MemberPicker
+            availableFriends={friends}
+            selectedFriends={selectedFriends}
+            onToggleFriend={handleToggleFriend}
+          />
+        </div>
+      )}
 
       {error && <p>{error}</p>}
 

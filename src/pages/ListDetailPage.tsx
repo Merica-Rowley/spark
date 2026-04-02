@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useListDetail } from "../hooks/useListDetail";
+import { supabase } from "../lib/supabaseClient";
 import { type ListItem } from "../types";
 import ListHeader from "../components/lists/list-detail/ListHeader";
 import ListItemsGrid from "../components/lists/list-detail/ListItemsGrid";
 import CreatePostModal from "../components/lists/list-detail/CreatePostModal";
 import CompletedItemModal from "../components/lists/list-detail/CompletedItemModal";
 import EditListModal from "../components/lists/list-detail/EditListModal";
+import ManageMembersModal from "../components/lists/list-detail/ManageMembersModal";
 
 export default function ListDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +23,10 @@ export default function ListDetailPage() {
     uncompleteItem,
     toggleStar,
     updateListDetails,
+    addMember,
+    removeMember,
+    transferOwnership,
+    getAvailableFriends,
   } = useListDetail(id!);
 
   const [postModalItem, setPostModalItem] = useState<ListItem | null>(null);
@@ -28,6 +34,15 @@ export default function ListDetailPage() {
     null,
   );
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  // get current user id for member management
+  useState(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUserId(data.user?.id ?? null);
+    });
+  });
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -35,11 +50,18 @@ export default function ListDetailPage() {
 
   const handleItemCheck = async (item: ListItem) => {
     await completeItem(item.id);
-    setPostModalItem(item); // open post modal after completing
+    setPostModalItem(item);
   };
 
   const handleCompletedItemClick = (item: ListItem) => {
-    setCompletedModalItem(item); // open completed item modal
+    setCompletedModalItem(item);
+  };
+
+  const handleLeaveList = async () => {
+    if (!currentUserId) return;
+    if (!confirm("Are you sure you want to leave this list?")) return;
+    await removeMember(currentUserId);
+    navigate("/lists");
   };
 
   return (
@@ -52,6 +74,8 @@ export default function ListDetailPage() {
         isStarred={listDetail.is_starred}
         onToggleStar={() => toggleStar(listDetail.is_starred)}
         onEdit={() => setShowEditModal(true)}
+        onManageMembers={() => setShowMembersModal(true)}
+        onLeaveList={handleLeaveList}
       />
       <ListItemsGrid
         items={listDetail.items}
@@ -85,6 +109,7 @@ export default function ListDetailPage() {
           }}
         />
       )}
+
       {showEditModal && (
         <EditListModal
           list={listDetail.list}
@@ -93,6 +118,19 @@ export default function ListDetailPage() {
             await updateListDetails(title, imageFile, resetImage);
             setShowEditModal(false);
           }}
+        />
+      )}
+
+      {showMembersModal && currentUserId && (
+        <ManageMembersModal
+          listId={id!}
+          members={listDetail.members}
+          currentUserId={currentUserId}
+          onClose={() => setShowMembersModal(false)}
+          onAddMember={addMember}
+          onRemoveMember={removeMember}
+          onTransferOwnership={transferOwnership}
+          getAvailableFriends={getAvailableFriends}
         />
       )}
     </div>

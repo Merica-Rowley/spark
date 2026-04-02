@@ -5,6 +5,7 @@ import {
   type ListRole,
 } from "../../../types";
 import ListImage from "../../common/ListImage";
+import Avatar from "../../common/Avatar";
 
 type Props = {
   list: List;
@@ -13,6 +14,8 @@ type Props = {
   isStarred: boolean;
   onToggleStar: () => Promise<void>;
   onEdit: () => void;
+  onManageMembers: () => void;
+  onLeaveList: () => void;
 };
 
 export default function ListHeader({
@@ -22,6 +25,8 @@ export default function ListHeader({
   isStarred,
   onToggleStar,
   onEdit,
+  onManageMembers,
+  onLeaveList,
 }: Props) {
   const [starring, setStarring] = useState(false);
 
@@ -42,11 +47,27 @@ export default function ListHeader({
         <button onClick={handleStar} disabled={starring}>
           {isStarred ? "⭐" : "☆"}
         </button>
-        {role === "owner" && <button onClick={onEdit}>Edit</button>}
+        {role === "owner" && (
+          <>
+            <button onClick={onEdit}>Edit</button>
+            <button onClick={onManageMembers}>Manage Members</button>
+          </>
+        )}
+        {role === "member" && (
+          <>
+            <button onClick={onLeaveList}>Leave List</button>
+          </>
+        )}
       </div>
       <p>
         {members.map((m, i) => (
           <span key={m.user_id}>
+            <Avatar
+              avatarPath={m.avatar_url ?? null}
+              userId={m.user_id}
+              alt={m.username}
+              size={32}
+            />
             {m.username}
             {m.role === "owner" ? " (owner)" : ""}
             {i < members.length - 1 ? ", " : ""}
