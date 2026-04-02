@@ -11,4 +11,4 @@
 | 3/30 | Star/unstar lists                                                                                                               | 0.5 hours |
 | 3/31 | List images, update list image and title                                                                                        | 2 hours   |
 | 4/1  | **Collaboration** (presenting my progress, listening to others, offering feedback, interview with TA) - 1 hour, created favicon | 1.25 hour |
-| 4/1  | Alter friend invite table (in response to TA feedback), friends functionality (5:05)                                            | 1 hour    |
+| 4/1  | Alter friend invite table (in response to TA feedback), friends functionality, profile page                                     | 3.5 hours |

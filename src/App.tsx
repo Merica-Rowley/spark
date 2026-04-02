@@ -4,6 +4,7 @@ import ListsPage from "./pages/ListsPage";
 import ListDetailPage from "./pages/ListDetailPage";
 import FriendsPage from "./pages/FriendsPage";
 import InvitePage from "./pages/InvitePage";
+import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -32,6 +33,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <FriendsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />

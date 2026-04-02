@@ -1,4 +1,5 @@
 import { type Friend } from "../../types";
+import Avatar from "../common/Avatar";
 
 type Props = {
   friend: Friend;
@@ -18,6 +19,11 @@ export default function FriendCard({ friend, onRemove }: Props) {
 
   return (
     <div>
+      <Avatar
+        avatarPath={friend.avatar_url}
+        userId={friend.friend_id}
+        alt={friend.username}
+      />
       <span>{friend.username}</span>
       <button onClick={handleRemove}>Remove</button>
     </div>

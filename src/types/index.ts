@@ -68,3 +68,12 @@ export type FriendInvite = {
   created_at: string;
   expires_at: string;
 };
+
+//  Profile
+
+export type Profile = {
+  id: string;
+  username: string;
+  avatar_url: string | null;
+  created_at: string;
+};

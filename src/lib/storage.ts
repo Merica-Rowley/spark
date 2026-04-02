@@ -36,3 +36,37 @@ export async function deleteImage(imagePath: string): Promise<void> {
 
   if (error) throw new Error(error.message);
 }
+
+export function getDicebearUrl(userId: string): string {
+  return `https://api.dicebear.com/7.x/rings/svg?seed=${encodeURIComponent(userId)}`;
+}
+
+export async function getAvatarUrl(
+  avatarPath: string | null,
+  userId: string,
+): Promise<string> {
+  if (!avatarPath) return getDicebearUrl(userId);
+  try {
+    return await getSignedUrl(avatarPath);
+  } catch {
+    return getDicebearUrl(userId);
+  }
+}
+
+export async function uploadAvatar(
+  userId: string,
+  file: File,
+): Promise<string> {
+  const fileExt = file.name.split(".").pop();
+  const filePath = `avatars/${userId}/avatar.${fileExt}`;
+
+  // remove old avatar first
+  await supabase.storage.from("images").remove([filePath]);
+
+  const { error } = await supabase.storage
+    .from("images")
+    .upload(filePath, file, { upsert: true });
+
+  if (error) throw new Error(error.message);
+  return filePath;
+}

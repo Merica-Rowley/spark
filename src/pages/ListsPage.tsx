@@ -22,6 +22,7 @@ export default function ListsPage() {
     <div>
       <div>
         <h1>My Lists</h1>
+        <button onClick={() => navigate("/profile")}>Profile</button>
         <button onClick={() => navigate("/friends")}>Friends</button>
         <button onClick={() => setShowModal(true)}>+ Create List</button>
         <button onClick={handleSignOut}>Sign Out</button>

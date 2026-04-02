@@ -63,6 +63,7 @@ export default function EditListModal({ list, onClose, onSaved }: Props) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          disabled={loading}
         />
       </div>
 
