@@ -12,3 +12,4 @@
 | 3/31 | List images, update list image and title                                                                                        | 2 hours   |
 | 4/1  | **Collaboration** (presenting my progress, listening to others, offering feedback, interview with TA) - 1 hour, created favicon | 1.25 hour |
 | 4/1  | Alter friend invite table (in response to TA feedback), friends functionality, profile page                                     | 3.5 hours |
+| 4/2  | **Collaboration** (peer reviews of initial project design)                                                                      | 1 hour    |

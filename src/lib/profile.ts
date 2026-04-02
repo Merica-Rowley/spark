@@ -18,6 +18,17 @@ export async function getProfile(): Promise<Profile> {
   return data;
 }
 
+export async function getProfileById(userId: string): Promise<Profile> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 export async function updateProfile(
   currentProfile: Profile,
   newUsername: string,

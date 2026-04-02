@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { type Friend } from "../../types";
 import Avatar from "../common/Avatar";
 
@@ -7,7 +8,10 @@ type Props = {
 };
 
 export default function FriendCard({ friend, onRemove }: Props) {
-  const handleRemove = async () => {
+  const navigate = useNavigate();
+
+  const handleRemove = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (
       !confirm(
         `Are you sure you want to remove ${friend.username} as a friend?`,
@@ -18,7 +22,7 @@ export default function FriendCard({ friend, onRemove }: Props) {
   };
 
   return (
-    <div>
+    <div onClick={() => navigate(`/friends/${friend.friend_id}`)}>
       <Avatar
         avatarPath={friend.avatar_url}
         userId={friend.friend_id}
