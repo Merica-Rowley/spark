@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useProfile } from "../hooks/useProfile";
 import Avatar from "../components/common/Avatar";
 import EditProfileModal from "../components/profile/EditProfileModal";
@@ -11,7 +10,6 @@ import { supabase } from "../lib/supabaseClient";
 export default function ProfilePage() {
   const { profile, loading, error, updateProfile } = useProfile();
   const [showEditModal, setShowEditModal] = useState(false);
-  const navigate = useNavigate();
 
   const [userId, setUserId] = useState<string | null>(null);
 
@@ -39,7 +37,6 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <button onClick={() => navigate("/lists")}>← Back</button>
       <h1>Profile</h1>
 
       <Avatar

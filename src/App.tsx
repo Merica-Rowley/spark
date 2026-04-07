@@ -1,65 +1,75 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import AuthLayout from "./components/nav/AuthLayout";
 import LoginPage from "./pages/LoginPage";
 import ListsPage from "./pages/ListsPage";
 import ListDetailPage from "./pages/ListDetailPage";
 import FriendsPage from "./pages/FriendsPage";
-import InvitePage from "./pages/InvitePage";
+import FeedPage from "./pages/FeedPage";
 import ProfilePage from "./pages/ProfilePage";
 import FriendProfilePage from "./pages/FriendProfilePage";
-import FeedPage from "./pages/FeedPage";
-import ProtectedRoute from "./components/ProtectedRoute";
+import SettingsPage from "./pages/SettingsPage";
+import InvitePage from "./pages/InvitePage";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/invite/:code" element={<InvitePage />} />
+
       <Route
         path="/lists"
         element={
-          <ProtectedRoute>
+          <AuthLayout>
             <ListsPage />
-          </ProtectedRoute>
+          </AuthLayout>
         }
       />
       <Route
         path="/lists/:id"
         element={
-          <ProtectedRoute>
+          <AuthLayout>
             <ListDetailPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/friends"
-        element={
-          <ProtectedRoute>
-            <FriendsPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/friends/:id"
-        element={
-          <ProtectedRoute>
-            <FriendProfilePage />
-          </ProtectedRoute>
+          </AuthLayout>
         }
       />
       <Route
         path="/feed"
         element={
-          <ProtectedRoute>
+          <AuthLayout>
             <FeedPage />
-          </ProtectedRoute>
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/friends"
+        element={
+          <AuthLayout>
+            <FriendsPage />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/friends/:id"
+        element={
+          <AuthLayout>
+            <FriendProfilePage />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <AuthLayout>
+            <ProfilePage />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <AuthLayout>
+            <SettingsPage />
+          </AuthLayout>
         }
       />
       <Route path="*" element={<Navigate to="/lists" replace />} />
