@@ -13,8 +13,6 @@ type Props = {
 
 export default function CompletedItemModal({
   item,
-  listMembers,
-  currentUserId,
   onClose,
   onUncomplete,
   onCreatePost,
