@@ -6,6 +6,7 @@ import FriendsPage from "./pages/FriendsPage";
 import InvitePage from "./pages/InvitePage";
 import ProfilePage from "./pages/ProfilePage";
 import FriendProfilePage from "./pages/FriendProfilePage";
+import FeedPage from "./pages/FeedPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -50,6 +51,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <FriendProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/feed"
+        element={
+          <ProtectedRoute>
+            <FeedPage />
           </ProtectedRoute>
         }
       />

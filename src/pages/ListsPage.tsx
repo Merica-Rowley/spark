@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabaseClient";
 import { useLists } from "../hooks/useLists";
 import ListGrid from "../components/lists/ListGrid";
 import CreateListModal from "../components/lists/CreateListModal";
+import QuickAddItem from "../components/lists/QuickAddItem";
 import { useState } from "react";
 
 export default function ListsPage() {
@@ -24,9 +25,12 @@ export default function ListsPage() {
         <h1>My Lists</h1>
         <button onClick={() => navigate("/profile")}>Profile</button>
         <button onClick={() => navigate("/friends")}>Friends</button>
+        <button onClick={() => navigate("/feed")}>Feed</button>
         <button onClick={() => setShowModal(true)}>+ Create List</button>
         <button onClick={handleSignOut}>Sign Out</button>
       </div>
+
+      <QuickAddItem lists={lists} />
 
       <ListGrid
         lists={lists}

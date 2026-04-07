@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { type List } from "../../../types";
-import ListImage from "../../common/ListImage";
+import AppImage from "../../common/AppImage";
 
 type Props = {
   list: List;
@@ -44,7 +44,7 @@ export default function EditListModal({ list, onClose, onSaved }: Props) {
 
       <div>
         <label>Current image</label>
-        <ListImage imagePath={list.image_url} alt={list.title} />
+        <AppImage imagePath={list.image_url} alt={list.title} />
         {!isDefaultImage && !imageFile && (
           <label>
             <input

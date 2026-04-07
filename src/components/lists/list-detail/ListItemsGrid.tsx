@@ -13,7 +13,6 @@ type Props = {
 
 export default function ListItemsGrid({
   items,
-  // role,
   onAddItem,
   onDeleteItem,
   onItemCheck,

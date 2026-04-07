@@ -8,7 +8,7 @@ type Props = {
   alt: string;
 };
 
-export default function ListImage({ imagePath, alt }: Props) {
+export default function AppImage({ imagePath, alt }: Props) {
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
 
   useEffect(() => {

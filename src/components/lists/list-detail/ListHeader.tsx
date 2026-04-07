@@ -4,7 +4,7 @@ import {
   type ListMemberWithProfile,
   type ListRole,
 } from "../../../types";
-import ListImage from "../../common/ListImage";
+import AppImage from "../../common/AppImage";
 import Avatar from "../../common/Avatar";
 
 type Props = {
@@ -41,7 +41,7 @@ export default function ListHeader({
 
   return (
     <div>
-      <ListImage imagePath={list.image_url} alt={list.title} />
+      <AppImage imagePath={list.image_url} alt={list.title} />
       <div>
         <h1>{list.title}</h1>
         <button onClick={handleStar} disabled={starring}>
@@ -59,7 +59,7 @@ export default function ListHeader({
           </>
         )}
       </div>
-      <p>
+      <div>
         {members.map((m, i) => (
           <span key={m.user_id}>
             <Avatar
@@ -73,7 +73,7 @@ export default function ListHeader({
             {i < members.length - 1 ? ", " : ""}
           </span>
         ))}
-      </p>
+      </div>
       <p>Your role: {role}</p>
     </div>
   );

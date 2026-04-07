@@ -121,3 +121,11 @@ export async function transferListOwnership(
   });
   if (error) throw new Error(error.message);
 }
+
+export async function addItem(listId: string, content: string): Promise<void> {
+  const { error } = await supabase.rpc("add_list_item", {
+    p_list_id: listId,
+    p_content: content,
+  });
+  if (error) throw new Error(error.message);
+}

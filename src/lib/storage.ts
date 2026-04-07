@@ -19,6 +19,18 @@ export async function uploadListImage(
   return filePath;
 }
 
+export async function uploadImage(path: string, file: File): Promise<string> {
+  const fileExt = file.name.split(".").pop();
+  const filePath = `${path}.${fileExt}`;
+
+  const { error } = await supabase.storage
+    .from("images")
+    .upload(filePath, file, { upsert: true });
+
+  if (error) throw error;
+  return filePath;
+}
+
 export async function getSignedUrl(path: string): Promise<string> {
   const { data, error } = await supabase.storage
     .from("images")

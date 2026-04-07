@@ -34,6 +34,7 @@ export type ListItem = {
   completed_at: string | null;
   completed_by: string | null;
   created_at: string;
+  post_id: string | null; // null if no post exists yet
 };
 
 export type ListMemberWithProfile = {
@@ -77,4 +78,25 @@ export type Profile = {
   username: string;
   avatar_url: string | null;
   created_at: string;
+};
+
+// Posts
+
+export type PostParticipant = {
+  user_id: string;
+  username: string;
+  avatar_url: string | null;
+  is_author: boolean;
+};
+
+export type PostWithMeta = {
+  post_id: string;
+  content: string | null;
+  image_url: string | null;
+  created_at: string;
+  list_item_content: string;
+  list_title: string;
+  participants: PostParticipant[];
+  reaction_count: number;
+  user_reacted: boolean;
 };

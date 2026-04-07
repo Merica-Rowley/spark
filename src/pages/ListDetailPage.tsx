@@ -27,6 +27,8 @@ export default function ListDetailPage() {
     removeMember,
     transferOwnership,
     getAvailableFriends,
+    createItemPost,
+    deleteItemPost,
   } = useListDetail(id!);
 
   const [postModalItem, setPostModalItem] = useState<ListItem | null>(null);
@@ -86,18 +88,30 @@ export default function ListDetailPage() {
         onCompletedItemClick={handleCompletedItemClick}
       />
 
-      {postModalItem && (
+      {postModalItem && currentUserId && (
         <CreatePostModal
           item={postModalItem}
+          listMembers={listDetail.members}
+          currentUserId={currentUserId}
           onClose={() => setPostModalItem(null)}
           onPostCreated={() => setPostModalItem(null)}
           onSkip={() => setPostModalItem(null)}
+          onCreatePost={async (content, imageFile, participantIds) => {
+            await createItemPost(
+              postModalItem.id,
+              content,
+              imageFile,
+              participantIds,
+            );
+          }}
         />
       )}
 
-      {completedModalItem && (
+      {completedModalItem && currentUserId && (
         <CompletedItemModal
           item={completedModalItem}
+          listMembers={listDetail.members}
+          currentUserId={currentUserId}
           onClose={() => setCompletedModalItem(null)}
           onUncomplete={async () => {
             await uncompleteItem(completedModalItem.id);
@@ -107,6 +121,7 @@ export default function ListDetailPage() {
             setPostModalItem(completedModalItem);
             setCompletedModalItem(null);
           }}
+          onDeletePost={deleteItemPost}
         />
       )}
 

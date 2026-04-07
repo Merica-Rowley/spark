@@ -9,6 +9,7 @@ import {
   transferListOwnership,
   getFriendsNotOnList,
 } from "../lib/lists";
+import { createPost, deletePost } from "../lib/posts";
 import { type Friend, type ListDetail } from "../types";
 
 export function useListDetail(listId: string) {
@@ -101,6 +102,29 @@ export function useListDetail(listId: string) {
     }
   }
 
+  async function createItemPost(
+    listItemId: string,
+    content: string | null,
+    imageFile: File | null,
+    participantIds: string[],
+  ) {
+    try {
+      await createPost(listItemId, content, imageFile, participantIds);
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to create post");
+    }
+  }
+
+  async function deleteItemPost(postId: string) {
+    try {
+      await deletePost(postId);
+      await fetchListDetail();
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to delete post");
+    }
+  }
+
   async function updateListDetails(
     title: string,
     newImageFile: File | null,
@@ -185,5 +209,7 @@ export function useListDetail(listId: string) {
     removeMember,
     transferOwnership,
     getAvailableFriends,
+    createItemPost,
+    deleteItemPost,
   };
 }

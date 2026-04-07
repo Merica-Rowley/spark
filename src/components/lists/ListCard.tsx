@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type ListWithMeta } from "../../types";
-import ListImage from "../common/ListImage";
+import AppImage from "../common/AppImage";
 
 type Props = {
   list: ListWithMeta;
@@ -31,7 +31,7 @@ export default function ListCard({ list, onDeleteList, onToggleStar }: Props) {
 
   return (
     <div onClick={() => navigate(`/lists/${list.id}`)}>
-      <ListImage imagePath={list.image_url} alt={list.title} />
+      <AppImage imagePath={list.image_url} alt={list.title} />
       <button onClick={handleStar} disabled={starring}>
         {list.is_starred ? "⭐" : "☆"}
       </button>
