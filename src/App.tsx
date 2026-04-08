@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AuthLayout from "./components/nav/AuthLayout";
 import LoginPage from "./pages/LoginPage";
 import ListsPage from "./pages/ListsPage";
@@ -9,6 +9,8 @@ import ProfilePage from "./pages/ProfilePage";
 import FriendProfilePage from "./pages/FriendProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 import InvitePage from "./pages/InvitePage";
+import NotFound from "./pages/NotFound";
+import Index from "./Index";
 
 export default function App() {
   return (
@@ -72,7 +74,8 @@ export default function App() {
           </AuthLayout>
         }
       />
-      <Route path="*" element={<Navigate to="/lists" replace />} />
+      <Route path="/" element={<Index />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
