@@ -4,16 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>spark</title>
-    <script>
-      // Handle redirect from 404.html
-      const redirect = sessionStorage.getItem("redirect");
-      if (redirect) {
-        sessionStorage.removeItem("redirect");
-        const { path, search, hash } = JSON.parse(redirect);
-        window.history.replaceState(null, "", "/spark" + path + search + hash);
-      }
-    </script>
+    <title>Spark</title>
   </head>
   <body>
     <div id="root"></div>
