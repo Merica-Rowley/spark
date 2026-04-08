@@ -21,7 +21,7 @@ export default function NotFound() {
         The page you're looking for may have been moved, deleted, or never
         existed.
       </p>
-      <button onClick={() => navigate("/list")}>← Back to home</button>
+      <button onClick={() => navigate("/lists")}>← Back to home</button>
     </div>
   );
 }
