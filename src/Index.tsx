@@ -7,7 +7,7 @@ export default function Index() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      navigate(session ? "/list" : "/login", { replace: true });
+      navigate(session ? "/lists" : "/login", { replace: true });
     });
   }, []);
 
