@@ -1,5 +1,11 @@
-import { useState } from "react";
-import { type ListItem, type ListMemberWithProfile } from "../../../types";
+import { useState, useEffect } from "react";
+import {
+  type ListItem,
+  type ListMemberWithProfile,
+  type PostWithMeta,
+} from "../../../types";
+import { getPostById, toggleReaction } from "../../../lib/posts";
+import PostCard from "../../posts/PostCard";
 
 type Props = {
   item: ListItem;
@@ -20,8 +26,36 @@ export default function CompletedItemModal({
 }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [post, setPost] = useState<PostWithMeta | null>(null);
+  const [postLoading, setPostLoading] = useState(false);
 
   const hasPost = !!item.post_id;
+
+  useEffect(() => {
+    if (!item.post_id) return;
+    setPostLoading(true);
+    getPostById(item.post_id)
+      .then(setPost)
+      .catch(console.error)
+      .finally(() => setPostLoading(false));
+  }, [item.post_id]);
+
+  const handleToggleReaction = async (postId: string) => {
+    try {
+      const result = await toggleReaction(postId);
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              user_reacted: result.user_reacted,
+              reaction_count: result.reaction_count,
+            }
+          : prev,
+      );
+    } catch (err) {
+      console.error("Failed to toggle reaction:", err);
+    }
+  };
 
   const handleUncomplete = async () => {
     if (hasPost) {
@@ -55,7 +89,6 @@ export default function CompletedItemModal({
 
   const handleDeletePost = async () => {
     if (!item.post_id) return;
-    if (!confirm("Are you sure you want to delete this post?")) return;
     try {
       setLoading(true);
       await onDeletePost(item.post_id);
@@ -78,11 +111,23 @@ export default function CompletedItemModal({
 
       {hasPost ? (
         <div>
-          <p>A post exists for this item.</p>
-          {/* Full post display will be added when PostCard is built */}
-          <button onClick={handleDeletePost} disabled={loading}>
-            Delete Post
-          </button>
+          {postLoading ? (
+            <p>Loading post...</p>
+          ) : post ? (
+            <PostCard
+              post={post}
+              onToggleReaction={handleToggleReaction}
+              showDeleteButton={true}
+              onDelete={handleDeletePost}
+              onUpdated={() => {
+                if (item.post_id) {
+                  getPostById(item.post_id).then(setPost).catch(console.error);
+                }
+              }}
+            />
+          ) : (
+            <p>Could not load post.</p>
+          )}
         </div>
       ) : (
         <div>

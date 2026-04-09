@@ -11,11 +11,14 @@ import {
 } from "../lib/lists";
 import { createPost, deletePost } from "../lib/posts";
 import { type Friend, type ListDetail } from "../types";
+import { useAuth } from "../context/AuthContext";
 
 export function useListDetail(listId: string) {
   const [listDetail, setListDetail] = useState<ListDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { profile } = useAuth();
 
   useEffect(() => {
     fetchListDetail();
@@ -109,7 +112,13 @@ export function useListDetail(listId: string) {
     participantIds: string[],
   ) {
     try {
-      await createPost(listItemId, content, imageFile, participantIds);
+      await createPost(
+        listItemId,
+        content,
+        imageFile,
+        participantIds,
+        profile.id,
+      );
       await fetchListDetail();
     } catch (err) {
       throw err instanceof Error ? err : new Error("Failed to create post");

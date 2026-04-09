@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { getProfile } from "../../lib/profile";
 import { type Profile } from "../../types";
 import NavBar from "./NavBar";
+import { AuthProvider } from "../../context/AuthContext";
 
 type Props = {
   children: React.ReactNode;
@@ -18,12 +19,19 @@ export default function AuthLayout({ children }: Props) {
     checkAuthAndProfile();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (!session) {
-          setAuthenticated(false);
-          setLoading(false);
-        } else {
-          checkAuthAndProfile();
+      (event, session) => {
+        // only re-check on actual auth changes, not the initial session load
+        if (
+          event === "SIGNED_IN" ||
+          event === "SIGNED_OUT" ||
+          event === "TOKEN_REFRESHED"
+        ) {
+          if (!session) {
+            setAuthenticated(false);
+            setLoading(false);
+          } else {
+            checkAuthAndProfile();
+          }
         }
       },
     );
@@ -56,9 +64,11 @@ export default function AuthLayout({ children }: Props) {
   if (!profile) return <div>Loading profile...</div>;
 
   return (
-    <div>
-      <NavBar profile={profile} />
-      <main style={{ padding: "24px" }}>{children}</main>
-    </div>
+    <AuthProvider profile={profile}>
+      <div>
+        <NavBar profile={profile} />
+        <main style={{ padding: "24px" }}>{children}</main>
+      </div>
+    </AuthProvider>
   );
 }

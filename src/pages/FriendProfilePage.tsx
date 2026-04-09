@@ -8,7 +8,12 @@ export default function FriendProfilePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { profile, loading, error } = useFriendProfile(id!);
-  const { posts, loading: postsLoading, toggleReaction } = useProfilePosts(id!);
+  const {
+    posts,
+    loading: postsLoading,
+    toggleReaction,
+    refetch,
+  } = useProfilePosts(id!);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -46,6 +51,7 @@ export default function FriendProfilePage() {
               key={post.post_id}
               post={post}
               onToggleReaction={toggleReaction}
+              onUpdated={refetch}
             />
           ))
         )}

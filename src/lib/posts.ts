@@ -1,23 +1,19 @@
 import { supabase } from "./supabaseClient";
 import { uploadImage } from "./storage";
-import { type PostWithMeta } from "../types";
+import { type ListMemberWithProfile, type PostWithMeta } from "../types";
 
 export async function createPost(
   listItemId: string,
   content: string | null,
   imageFile: File | null,
   participantIds: string[],
+  userId: string, // pass in from component
 ): Promise<string> {
   let imagePath: string | null = null;
 
-  // upload image first if provided
   if (imageFile) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) throw new Error("Not authenticated");
     imagePath = await uploadImage(
-      `posts/${user.id}/${crypto.randomUUID()}`,
+      `posts/${userId}/${crypto.randomUUID()}`,
       imageFile,
     );
   }
@@ -87,6 +83,26 @@ export async function toggleReaction(
   postId: string,
 ): Promise<{ user_reacted: boolean; reaction_count: number }> {
   const { data, error } = await supabase.rpc("toggle_reaction", {
+    p_post_id: postId,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function getListMembersForPost(
+  postId: string,
+): Promise<ListMemberWithProfile[]> {
+  const { data, error } = await supabase.rpc("get_list_members_for_post", {
+    p_post_id: postId,
+  });
+  if (error) throw new Error(error.message);
+  return data ?? [];
+}
+
+export async function getPostById(
+  postId: string,
+): Promise<PostWithMeta | null> {
+  const { data, error } = await supabase.rpc("get_post_by_id", {
     p_post_id: postId,
   });
   if (error) throw new Error(error.message);

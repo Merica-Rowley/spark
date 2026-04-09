@@ -53,6 +53,7 @@ export function useFeed() {
 
   return {
     posts,
+    setPosts,
     loading,
     error,
     refetch: fetchFeed,

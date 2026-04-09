@@ -18,4 +18,4 @@
 | 4/6  | Posting, feed, user posts on profile page                                                                         | 2 hours    |
 | 4/7  | Fixing bugs with posting, added quick add feature, added nav bar                                                  | 1.5 hours  |
 | 4/8  | **Collaboration** (listening to presentations and progress of classmates)                                         | 1 hour     |
-| 4/8  | Fixing email signin flow and app routing                                                                          |
+| 4/8  | Fixing email signin flow and app routing, bug fixes and minor changes to layouts, a bit of refactoring            | 3.5 hours  |

@@ -37,6 +37,9 @@ export default function ListCard({ list, onDeleteList, onToggleStar }: Props) {
       </button>
       <span>{list.title}</span>
       <span>{list.role}</span>
+      <span>
+        {list.completed_items}/{list.total_items} items
+      </span>
       {list.role === "owner" && <button onClick={handleDelete}>Delete</button>}
     </div>
   );

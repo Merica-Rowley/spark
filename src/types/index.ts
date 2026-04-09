@@ -23,6 +23,8 @@ export type ListMember = {
 export type ListWithMeta = List & {
   is_starred: boolean;
   role: ListRole;
+  total_items: number;
+  completed_items: number;
 };
 
 export type ListItem = {

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useListDetail } from "../hooks/useListDetail";
-import { supabase } from "../lib/supabaseClient";
 import { type ListItem } from "../types";
+import { useAuth } from "../context/AuthContext";
 import ListHeader from "../components/lists/list-detail/ListHeader";
 import ListItemsGrid from "../components/lists/list-detail/ListItemsGrid";
 import CreatePostModal from "../components/lists/list-detail/CreatePostModal";
@@ -37,14 +37,9 @@ export default function ListDetailPage() {
   );
   const [showEditModal, setShowEditModal] = useState(false);
   const [showMembersModal, setShowMembersModal] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  // get current user id for member management
-  useState(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setCurrentUserId(data.user?.id ?? null);
-    });
-  });
+  const { profile } = useAuth();
+  const currentUserId = profile.id;
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

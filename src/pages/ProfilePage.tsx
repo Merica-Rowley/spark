@@ -1,23 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useProfile } from "../hooks/useProfile";
 import Avatar from "../components/common/Avatar";
 import EditProfileModal from "../components/profile/EditProfileModal";
 import { useProfilePosts } from "../hooks/useProfilePosts";
 import PostCard from "../components/posts/PostCard";
 import { deletePost } from "../lib/posts";
-import { supabase } from "../lib/supabaseClient";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProfilePage() {
-  const { profile, loading, error, updateProfile } = useProfile();
+  const { loading, error, updateProfile } = useProfile();
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id ?? null);
-    });
-  }, []);
+  // with this:
+  const { profile } = useAuth();
+  const userId = profile.id;
 
   const {
     posts,
@@ -65,6 +61,7 @@ export default function ProfilePage() {
               onToggleReaction={toggleReaction}
               showDeleteButton={true}
               onDelete={handleDeletePost}
+              onUpdated={refetchPosts}
             />
           ))
         )}

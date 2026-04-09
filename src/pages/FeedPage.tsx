@@ -2,7 +2,8 @@ import { useFeed } from "../hooks/useFeed";
 import PostCard from "../components/posts/PostCard";
 
 export default function FeedPage() {
-  const { posts, loading, error, markViewed, toggleReaction } = useFeed();
+  const { posts, setPosts, loading, error, markViewed, toggleReaction } =
+    useFeed();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -19,6 +20,21 @@ export default function FeedPage() {
           post={post}
           onToggleReaction={toggleReaction}
           onMarkViewed={markViewed}
+          onUpdated={(updatedPost) => {
+            if (updatedPost) {
+              // update the specific post in local state
+              setPosts((prev) =>
+                prev.map((p) =>
+                  p.post_id === updatedPost.post_id ? updatedPost : p,
+                ),
+              );
+            } else {
+              // post was deleted or user removed themselves — remove from feed
+              setPosts((prev) =>
+                prev.filter((p) => p.post_id !== post.post_id),
+              );
+            }
+          }}
         />
       ))}
 
