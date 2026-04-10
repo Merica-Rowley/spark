@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { HiXMark, HiStar, HiTrash, HiUserPlus } from "react-icons/hi2";
+import {
+  HiXMark,
+  HiMiniRocketLaunch,
+  HiTrash,
+  HiUserPlus,
+} from "react-icons/hi2";
 import {
   type PostParticipant,
   type ListMemberWithProfile,
@@ -118,7 +123,7 @@ export default function ManageParticipantsModal({
                   </div>
                   {p.is_author ? (
                     <span className={styles.authorBadge}>
-                      <HiStar size={10} />
+                      <HiMiniRocketLaunch size={10} />
                       Author
                     </span>
                   ) : (
