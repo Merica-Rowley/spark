@@ -5,7 +5,8 @@ import QuickAddItem from "../components/lists/QuickAddItem";
 import { useState } from "react";
 
 export default function ListsPage() {
-  const { lists, loading, error, refetch, removeList, toggleStar } = useLists();
+  const { lists, loading, refreshing, error, refetch, removeList, toggleStar } =
+    useLists();
   const [showModal, setShowModal] = useState(false);
 
   if (loading) return <div>Loading...</div>;
@@ -18,12 +19,13 @@ export default function ListsPage() {
         <button onClick={() => setShowModal(true)}>+ Create List</button>
       </div>
 
-      <QuickAddItem lists={lists} />
+      <QuickAddItem lists={lists} onItemAdded={refetch} />
 
       <ListGrid
         lists={lists}
         onDeleteList={removeList}
         onToggleStar={toggleStar}
+        refreshing={refreshing} // optional — can show a subtle spinner
       />
 
       {showModal && (

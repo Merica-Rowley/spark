@@ -4,9 +4,10 @@ import { addItem } from "../../lib/lists";
 
 type Props = {
   lists: ListWithMeta[];
+  onItemAdded: () => void;
 };
 
-export default function QuickAddItem({ lists }: Props) {
+export default function QuickAddItem({ lists, onItemAdded }: Props) {
   const [selectedListId, setSelectedListId] = useState<string>(
     lists[0]?.id ?? "",
   );
@@ -27,6 +28,7 @@ export default function QuickAddItem({ lists }: Props) {
 
       setContent("");
       setSuccess(true);
+      onItemAdded();
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to add item");

@@ -5,15 +5,20 @@ import { type ListWithMeta } from "../types";
 export function useLists() {
   const [lists, setLists] = useState<ListWithMeta[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchLists();
   }, []);
 
-  async function fetchLists() {
+  async function fetchLists(background = false) {
     try {
-      setLoading(true);
+      if (background) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
       setError(null);
       const data = await getUserLists();
       setLists(data);
@@ -21,6 +26,7 @@ export function useLists() {
       setError(err instanceof Error ? err.message : "Failed to fetch lists");
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }
 
@@ -60,5 +66,13 @@ export function useLists() {
     }
   }
 
-  return { lists, loading, error, refetch: fetchLists, removeList, toggleStar };
+  return {
+    lists,
+    loading,
+    refreshing,
+    error,
+    refetch: () => fetchLists(true), // always background refresh when called manually
+    removeList,
+    toggleStar,
+  };
 }
