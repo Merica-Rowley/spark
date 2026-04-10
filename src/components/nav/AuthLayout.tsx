@@ -5,6 +5,7 @@ import { getProfile } from "../../lib/profile";
 import { type Profile } from "../../types";
 import NavBar from "./NavBar";
 import { AuthProvider } from "../../context/AuthContext";
+import styles from "./AuthLayout.module.css";
 
 type Props = {
   children: React.ReactNode;
@@ -65,9 +66,9 @@ export default function AuthLayout({ children }: Props) {
 
   return (
     <AuthProvider profile={profile}>
-      <div>
+      <div className={styles.layout}>
         <NavBar profile={profile} />
-        <main style={{ padding: "24px" }}>{children}</main>
+        <main className={styles.main}>{children}</main>
       </div>
     </AuthProvider>
   );

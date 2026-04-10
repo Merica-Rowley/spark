@@ -14,7 +14,7 @@ export default function FriendsList({ friends, onRemoveFriend }: Props) {
   }
 
   return (
-    <div>
+    <>
       {friends.map((friend) => (
         <FriendCard
           key={friend.friend_id}
@@ -22,6 +22,6 @@ export default function FriendsList({ friends, onRemoveFriend }: Props) {
           onRemove={onRemoveFriend}
         />
       ))}
-    </div>
+    </>
   );
 }

@@ -1,0 +1,113 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.card:hover {
+  border-color: var(--color-gray-400);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardCompleted {
+  background: var(--color-surface);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.cardCompleted:hover {
+  opacity: 1;
+  border-color: var(--color-accent-primary);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition-base);
+  color: transparent;
+}
+
+.checkbox:hover {
+  border-color: var(--color-accent-primary);
+  background: var(--color-accent-primary-light);
+}
+
+.checkboxChecked {
+  border-color: var(--color-accent-primary);
+  background: var(--color-accent-primary);
+  color: var(--color-dark);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.text {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.textCompleted {
+  text-decoration: line-through;
+  color: var(--color-text-secondary);
+}
+
+.postIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-accent-secondary);
+  font-weight: var(--font-medium);
+  flex-shrink: 0;
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray-400);
+  opacity: 0;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+.card:hover .deleteButton {
+  opacity: 1;
+}
+
+.deleteButton:hover {
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+  .deleteButton {
+    opacity: 1;
+  }
+}

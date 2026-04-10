@@ -6,9 +6,10 @@ const DEFAULT_IMAGE = "defaults/default-list-cover.svg";
 type Props = {
   imagePath: string | null;
   alt: string;
+  className?: string;
 };
 
-export default function AppImage({ imagePath, alt }: Props) {
+export default function AppImage({ imagePath, alt, className }: Props) {
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function AppImage({ imagePath, alt }: Props) {
       .catch(() => setSignedUrl(null));
   }, [imagePath]);
 
-  if (!signedUrl) return <div>Loading image...</div>;
+  if (!signedUrl) return <div className={className} />;
 
-  return <img src={signedUrl} alt={alt} />;
+  return <img src={signedUrl} alt={alt} className={className} />;
 }

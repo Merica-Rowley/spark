@@ -9,6 +9,8 @@ import CreatePostModal from "../components/lists/list-detail/CreatePostModal";
 import CompletedItemModal from "../components/lists/list-detail/CompletedItemModal";
 import EditListModal from "../components/lists/list-detail/EditListModal";
 import ManageMembersModal from "../components/lists/list-detail/ManageMembersModal";
+import styles from "./ListDetailPage.module.css";
+import { HiChevronLeft } from "react-icons/hi";
 
 export default function ListDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -62,8 +64,17 @@ export default function ListDetailPage() {
   };
 
   return (
-    <div>
-      <button onClick={() => navigate("/lists")}>← Back</button>
+    <div className={styles.page}>
+      <div className={styles.backButton}>
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={() => navigate("/lists")}
+        >
+          <HiChevronLeft size={18} />
+          Back
+        </button>
+      </div>
+
       <ListHeader
         list={listDetail.list}
         members={listDetail.members}

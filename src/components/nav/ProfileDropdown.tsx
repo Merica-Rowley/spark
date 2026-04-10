@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { HiUser, HiCog6Tooth, HiArrowRightOnRectangle } from "react-icons/hi2";
 import { supabase } from "../../lib/supabaseClient";
 import { type Profile } from "../../types";
 import Avatar from "../common/Avatar";
+import styles from "./ProfileDropdown.module.css";
+import clsx from "clsx";
 
 type Props = {
   profile: Profile;
@@ -13,7 +16,6 @@ export default function ProfileDropdown({ profile }: Props) {
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -38,9 +40,13 @@ export default function ProfileDropdown({ profile }: Props) {
   };
 
   return (
-    <div ref={dropdownRef} style={{ position: "relative" }}>
-      <button onClick={() => setOpen((prev) => !prev)}>
+    <div ref={dropdownRef} className={styles.container}>
+      <button
+        className={clsx(styles.trigger, open && styles.triggerOpen)}
+        onClick={() => setOpen((prev) => !prev)}
+      >
         <Avatar
+          key={profile.avatar_url} // forces remount when avatar changes
           avatarPath={profile.avatar_url}
           userId={profile.id}
           alt={profile.username}
@@ -49,26 +55,36 @@ export default function ProfileDropdown({ profile }: Props) {
       </button>
 
       {open && (
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "100%",
-            background: "white",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            minWidth: "160px",
-            zIndex: 100,
-          }}
-        >
-          <div style={{ padding: "8px 12px", borderBottom: "1px solid #eee" }}>
-            <p style={{ margin: 0, fontWeight: "bold" }}>{profile.username}</p>
+        <div className={styles.dropdown}>
+          <div className={styles.userInfo}>
+            <p className={styles.username}>{profile.username}</p>
           </div>
-          <button onClick={() => handleNavigate("/profile")}>
+
+          <button
+            className={styles.menuItem}
+            onClick={() => handleNavigate("/profile")}
+          >
+            <HiUser size={18} />
             View Profile
           </button>
-          <button onClick={() => handleNavigate("/settings")}>Settings</button>
-          <button onClick={handleSignOut}>Sign Out</button>
+
+          <button
+            className={styles.menuItem}
+            onClick={() => handleNavigate("/settings")}
+          >
+            <HiCog6Tooth size={18} />
+            Settings
+          </button>
+
+          <div className={styles.menuDivider} />
+
+          <button
+            className={clsx(styles.menuItem, styles.menuItemDanger)}
+            onClick={handleSignOut}
+          >
+            <HiArrowRightOnRectangle size={18} />
+            Sign Out
+          </button>
         </div>
       )}
     </div>

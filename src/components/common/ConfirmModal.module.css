@@ -1,0 +1,63 @@
+.modal {
+  max-width: 400px;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconCircle_danger {
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.iconCircle_warning {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.iconCircle_default {
+  background: var(--color-accent-secondary-light);
+  color: var(--color-accent-secondary);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.message {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  width: 100%;
+  justify-content: center;
+}

@@ -1,11 +1,21 @@
 import { useState } from "react";
 import {
+  HiStar,
+  HiOutlineStar,
+  HiPencil,
+  HiUserPlus,
+  HiArrowRightOnRectangle,
+  HiMiniRocketLaunch,
+} from "react-icons/hi2";
+import {
   type List,
   type ListMemberWithProfile,
   type ListRole,
 } from "../../../types";
-import AppImage from "../../common/AppImage";
 import Avatar from "../../common/Avatar";
+import AppImage from "../../common/AppImage";
+import styles from "./ListHeader.module.css";
+import clsx from "clsx";
 
 type Props = {
   list: List;
@@ -40,41 +50,81 @@ export default function ListHeader({
   };
 
   return (
-    <div>
-      <AppImage imagePath={list.image_url} alt={list.title} />
-      <div>
-        <h1>{list.title}</h1>
-        <button onClick={handleStar} disabled={starring}>
-          {isStarred ? "⭐" : "☆"}
-        </button>
-        {role === "owner" && (
-          <>
-            <button onClick={onEdit}>Edit</button>
-            <button onClick={onManageMembers}>Manage Members</button>
-          </>
-        )}
-        {role === "member" && (
-          <>
-            <button onClick={onLeaveList}>Leave List</button>
-          </>
-        )}
+    <div className={styles.header}>
+      {/* Banner image */}
+      <AppImage
+        imagePath={list.image_url}
+        alt={list.title}
+        className={styles.banner}
+      />
+
+      {/* Title row */}
+      <div className={styles.titleRow}>
+        <h1 className={styles.title}>{list.title}</h1>
+        <div className={styles.actions}>
+          <button
+            className={clsx(
+              styles.starButton,
+              isStarred && styles.starButtonActive,
+            )}
+            onClick={handleStar}
+            disabled={starring}
+            title={isStarred ? "Unstar" : "Star"}
+          >
+            {isStarred ? <HiStar size={20} /> : <HiOutlineStar size={20} />}
+          </button>
+          {role === "owner" && (
+            <>
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={onEdit}
+                title="Edit list"
+              >
+                <HiPencil size={16} />
+                Edit
+              </button>
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={onManageMembers}
+                title="Manage members"
+              >
+                <HiUserPlus size={16} />
+                Members
+              </button>
+            </>
+          )}
+          {role === "member" && (
+            <>
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={onLeaveList}
+                title="Leave list"
+              >
+                <HiArrowRightOnRectangle size={16} />
+                Leave
+              </button>
+            </>
+          )}
+        </div>
       </div>
-      <div>
-        {members.map((m, i) => (
-          <span key={m.user_id}>
+
+      {/* Members */}
+      <div className={styles.membersRow}>
+        {members.map((m) => (
+          <div key={m.user_id} className={styles.memberChip}>
             <Avatar
               avatarPath={m.avatar_url ?? null}
               userId={m.user_id}
               alt={m.username}
-              size={32}
+              size={20}
             />
             {m.username}
-            {m.role === "owner" ? " (owner)" : ""}
-            {i < members.length - 1 ? ", " : ""}
-          </span>
+            {m.role === "owner" && (
+              <HiMiniRocketLaunch size={12} className={styles.ownerIcon} />
+            )}
+          </div>
         ))}
       </div>
-      <p>Your role: {role}</p>
     </div>
   );
 }

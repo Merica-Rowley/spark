@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { HiUserPlus, HiCheckCircle, HiXCircle } from "react-icons/hi2";
 import { supabase } from "../lib/supabaseClient";
 import { acceptInvite, getInviteByCode } from "../lib/friends";
+import styles from "./InvitePage.module.css";
+import clsx from "clsx";
 
 export default function InvitePage() {
   const { code } = useParams<{ code: string }>();
@@ -18,7 +21,6 @@ export default function InvitePage() {
 
   async function checkAuthAndInvite() {
     try {
-      // check if invite is valid first
       const invite = await getInviteByCode(code!);
 
       if (!invite) {
@@ -39,7 +41,6 @@ export default function InvitePage() {
         return;
       }
 
-      // check if user is logged in
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -48,7 +49,6 @@ export default function InvitePage() {
         setIsAuthenticated(true);
         setStatus("ready");
       } else {
-        // store invite code in session storage so we can use it after signup
         sessionStorage.setItem("pendingInviteCode", code!);
         setStatus("ready");
       }
@@ -64,52 +64,186 @@ export default function InvitePage() {
       await acceptInvite(code!);
       sessionStorage.removeItem("pendingInviteCode");
       setStatus("success");
-      setTimeout(() => navigate("/friends"), 2000);
+      setTimeout(() => navigate("/friends"), 2500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to accept invite");
       setStatus("error");
     }
   }
 
-  if (status === "loading") return <div>Checking invite...</div>;
-
-  if (status === "error")
+  // Loading
+  if (status === "loading") {
     return (
-      <div>
-        <p>{error}</p>
-        <button onClick={() => navigate("/lists")}>Go to App</button>
-      </div>
-    );
-
-  if (status === "success")
-    return (
-      <div>
-        <p>You are now friends! Redirecting...</p>
-      </div>
-    );
-
-  // status === 'ready'
-  if (!isAuthenticated) {
-    return (
-      <div>
-        <h1>You've been invited to Spark! ⚡</h1>
-        <p>Create an account to connect with your friend.</p>
-        <button onClick={() => navigate("/login?signup=true")}>
-          Create Account
-        </button>
-        <button onClick={() => navigate("/login")}>
-          I already have an account
-        </button>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.branding}>
+            <div className={styles.logoPlaceholder}>⚡</div>
+            <h1 className={styles.appName}>Spark</h1>
+          </div>
+          <div className={styles.card}>
+            <div className={styles.cardBody}>
+              <div
+                className={clsx(styles.statusIcon, styles.statusIconLoading)}
+              >
+                <div className="spinner" />
+              </div>
+              <p className={styles.cardTitle}>Checking invite...</p>
+              <p className={styles.cardText}>
+                Just a moment while we verify your invite link.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
+  // Error
+  if (status === "error") {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.branding}>
+            <div className={styles.logoPlaceholder}>⚡</div>
+            <h1 className={styles.appName}>Spark</h1>
+          </div>
+          <div className={styles.card}>
+            <div className={styles.cardBody}>
+              <div className={clsx(styles.statusIcon, styles.statusIconError)}>
+                <HiXCircle size={36} />
+              </div>
+              <p className={styles.cardTitle}>Invalid Invite</p>
+              <p className={styles.cardText}>{error}</p>
+              <div className={styles.actions}>
+                <button
+                  className={clsx("btn btn-primary", styles.actionButton)}
+                  onClick={() => navigate("/lists")}
+                >
+                  Go to App
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Success
+  if (status === "success") {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.branding}>
+            <div className={styles.logoPlaceholder}>⚡</div>
+            <h1 className={styles.appName}>Spark</h1>
+          </div>
+          <div className={styles.card}>
+            <div className={styles.cardBody}>
+              <div
+                className={clsx(styles.statusIcon, styles.statusIconSuccess)}
+              >
+                <HiCheckCircle size={36} />
+              </div>
+              <p className={styles.cardTitle}>You're now friends! 🎉</p>
+              <p className={styles.cardText}>
+                Redirecting you to your friends list...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Ready — unauthenticated user
+  if (!isAuthenticated) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.branding}>
+            <div className={styles.logoPlaceholder}>⚡</div>
+            <h1 className={styles.appName}>Spark</h1>
+          </div>
+          <div className={styles.card}>
+            <div className={styles.cardBody}>
+              <div className={clsx(styles.statusIcon, styles.statusIconInvite)}>
+                <HiUserPlus size={32} />
+              </div>
+              <p className={styles.cardTitle}>You've been invited!</p>
+              <p className={styles.cardText}>
+                Your friend has invited you to join Spark — the bucket list app
+                for sharing adventures with the people who matter most.
+              </p>
+              <div className={styles.actions}>
+                <button
+                  className={clsx("btn btn-primary", styles.actionButton)}
+                  onClick={() => navigate("/login?signup=true")}
+                >
+                  Create Account
+                </button>
+                <div className={styles.divider}>
+                  <div className={styles.dividerLine} />
+                  <span className={styles.dividerText}>
+                    already have an account?
+                  </span>
+                  <div className={styles.dividerLine} />
+                </div>
+                <button
+                  className={clsx("btn btn-ghost", styles.actionButton)}
+                  onClick={() => navigate("/login")}
+                >
+                  Log In
+                </button>
+              </div>
+            </div>
+          </div>
+          <p className={styles.footer}>
+            This invite link can only be used once and expires in 7 days.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Ready — authenticated user
   return (
-    <div>
-      <h1>Friend Invite</h1>
-      <p>You've received a friend invite. Would you like to accept it?</p>
-      <button onClick={() => navigate("/lists")}>Decline</button>
-      <button onClick={handleAccept}>Accept</button>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <div className={styles.branding}>
+          <div className={styles.logoPlaceholder}>⚡</div>
+          <h1 className={styles.appName}>Spark</h1>
+        </div>
+        <div className={styles.card}>
+          <div className={styles.cardBody}>
+            <div className={clsx(styles.statusIcon, styles.statusIconInvite)}>
+              <HiUserPlus size={32} />
+            </div>
+            <p className={styles.cardTitle}>Friend Invite</p>
+            <p className={styles.cardText}>
+              You've received a friend invite. Would you like to accept it?
+            </p>
+            <div className={styles.actions}>
+              <button
+                className={clsx("btn btn-primary", styles.actionButton)}
+                onClick={handleAccept}
+              >
+                <HiCheckCircle size={18} />
+                Accept Invite
+              </button>
+              <button
+                className={clsx("btn btn-ghost", styles.actionButton)}
+                onClick={() => navigate("/lists")}
+              >
+                Decline
+              </button>
+            </div>
+          </div>
+        </div>
+        <p className={styles.footer}>
+          This invite link can only be used once and expires in 7 days.
+        </p>
+      </div>
     </div>
   );
 }

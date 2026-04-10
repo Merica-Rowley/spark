@@ -4,7 +4,7 @@ import { type Profile } from "../types";
 import { useAuth } from "../context/AuthContext";
 
 export function useProfile() {
-  const { profile: authProfile } = useAuth();
+  const { profile: authProfile, updateProfile: updateAuthProfile } = useAuth();
   const [profile, setProfile] = useState<Profile>(authProfile);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,6 +15,7 @@ export function useProfile() {
       setError(null);
       const data = await getProfileById(authProfile.id);
       setProfile(data);
+      updateAuthProfile({ ...data }); // spread to ensure new reference
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch profile");
     } finally {
