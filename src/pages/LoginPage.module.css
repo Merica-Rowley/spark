@@ -35,6 +35,10 @@
   box-shadow: var(--shadow-lg);
 }
 
+[data-theme="dark"] .logoPlaceholder {
+  background: var(--color-accent-secondary);
+}
+
 .appName {
   font-family: var(--font-heading);
   font-size: var(--text-3xl);
