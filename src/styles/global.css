@@ -284,6 +284,7 @@ h6 {
 
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-gray-100);
+  color: var(--color-text-secondary);
 }
 
 .btn-danger {
