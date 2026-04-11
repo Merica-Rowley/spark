@@ -67,7 +67,7 @@ export default function AuthLayout({ children }: Props) {
   return (
     <AuthProvider profile={profile}>
       <div className={styles.layout}>
-        <NavBar profile={profile} />
+        <NavBar />
         <main className={styles.main}>{children}</main>
       </div>
     </AuthProvider>

@@ -18,7 +18,7 @@ export function AuthProvider({
   const [profile, setProfile] = useState<Profile>(initialProfile);
 
   const updateProfile = useCallback((newProfile: Profile) => {
-    setProfile({ ...newProfile }); // spread to ensure new reference
+    setProfile({ ...newProfile });
   }, []);
 
   return (

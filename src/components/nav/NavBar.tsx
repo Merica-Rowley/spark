@@ -1,15 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { HiHome, HiNewspaper, HiUserGroup } from "react-icons/hi2";
-import { type Profile } from "../../types";
 import ProfileDropdown from "./ProfileDropdown";
 import styles from "./NavBar.module.css";
 import clsx from "clsx";
+import { useAuth } from "../../context/AuthContext";
 
-type Props = {
-  profile: Profile;
-};
+export default function NavBar() {
+  const { profile } = useAuth();
 
-export default function NavBar({ profile }: Props) {
   return (
     <nav className={styles.nav}>
       <div className={styles.navInner}>
@@ -54,7 +52,7 @@ export default function NavBar({ profile }: Props) {
 
         {/* Profile dropdown */}
         <div className={styles.navRight}>
-          <ProfileDropdown key={profile.avatar_url} profile={profile} />
+          <ProfileDropdown key={profile.avatar_url} />
         </div>
       </div>
     </nav>

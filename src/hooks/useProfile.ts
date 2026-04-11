@@ -15,7 +15,7 @@ export function useProfile() {
       setError(null);
       const data = await getProfileById(authProfile.id);
       setProfile(data);
-      updateAuthProfile({ ...data }); // spread to ensure new reference
+      updateAuthProfile({ ...data });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch profile");
     } finally {

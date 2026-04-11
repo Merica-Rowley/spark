@@ -2,19 +2,16 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HiUser, HiCog6Tooth, HiArrowRightOnRectangle } from "react-icons/hi2";
 import { supabase } from "../../lib/supabaseClient";
-import { type Profile } from "../../types";
 import Avatar from "../common/Avatar";
 import styles from "./ProfileDropdown.module.css";
 import clsx from "clsx";
+import { useAuth } from "../../context/AuthContext";
 
-type Props = {
-  profile: Profile;
-};
-
-export default function ProfileDropdown({ profile }: Props) {
+export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { profile } = useAuth();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

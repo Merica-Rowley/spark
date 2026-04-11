@@ -70,15 +70,23 @@ export async function uploadAvatar(
   file: File,
 ): Promise<string> {
   const fileExt = file.name.split(".").pop();
-  const filePath = `avatars/${userId}/avatar.${fileExt}`;
+  const timestamp = Date.now();
+  const filePath = `avatars/${userId}/avatar_${timestamp}.${fileExt}`;
 
-  // remove old avatar first
-  await supabase.storage.from("images").remove([filePath]);
+  // remove all old avatars for this user first
+  const { data: existing } = await supabase.storage
+    .from("images")
+    .list(`avatars/${userId}`);
+
+  if (existing && existing.length > 0) {
+    const oldFiles = existing.map((f) => `avatars/${userId}/${f.name}`);
+    await supabase.storage.from("images").remove(oldFiles);
+  }
 
   const { error } = await supabase.storage
     .from("images")
     .upload(filePath, file, { upsert: true });
 
-  if (error) throw new Error(error.message);
+  if (error) throw error;
   return filePath;
 }
