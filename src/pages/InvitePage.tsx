@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseClient";
 import { acceptInvite, getInviteByCode } from "../lib/friends";
 import styles from "./InvitePage.module.css";
 import clsx from "clsx";
+import Logo from "../assets/Logo";
 
 export default function InvitePage() {
   const { code } = useParams<{ code: string }>();
@@ -77,7 +78,9 @@ export default function InvitePage() {
       <div className={styles.page}>
         <div className={styles.container}>
           <div className={styles.branding}>
-            <div className={styles.logoPlaceholder}>⚡</div>
+            <div className={styles.logoPlaceholder}>
+              <Logo size={48} />
+            </div>
             <h1 className={styles.appName}>Spark</h1>
           </div>
           <div className={styles.card}>

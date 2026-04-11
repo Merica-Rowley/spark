@@ -1,18 +1,102 @@
 import { supabase } from "./supabaseClient";
+import imageCompression from "browser-image-compression";
+import heic2any from "heic2any";
+
+export async function compressImage(
+  file: File,
+  maxSizeMB: number = 1,
+  maxWidthOrHeight: number = 1920,
+): Promise<File> {
+  let fileToCompress = file;
+
+  // convert HEIC/HEIF to JPEG first
+  const isHeic =
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    file.name.toLowerCase().endsWith(".heic") ||
+    file.name.toLowerCase().endsWith(".heif");
+
+  if (isHeic) {
+    try {
+      const converted = await heic2any({
+        blob: file,
+        toType: "image/jpeg",
+        quality: 0.9,
+      });
+      fileToCompress = new File(
+        [converted as Blob],
+        file.name.replace(/\.heic$/i, ".jpg").replace(/\.heif$/i, ".jpg"),
+        { type: "image/jpeg" },
+      );
+    } catch (err) {
+      console.error("HEIC conversion failed:", err);
+      // fall through to compression with original file
+    }
+  }
+
+  const options = {
+    maxSizeMB,
+    maxWidthOrHeight,
+    useWebWorker: true,
+    fileType: "image/webp",
+  };
+
+  try {
+    return await imageCompression(fileToCompress, options);
+  } catch (err) {
+    console.error("Compression failed:", err);
+    return fileToCompress;
+  }
+}
+
+export async function prepareImageForPreview(file: File): Promise<{
+  previewUrl: string;
+  convertedFile: File;
+}> {
+  let fileToUse = file;
+
+  const isHeic =
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    file.name.toLowerCase().endsWith(".heic") ||
+    file.name.toLowerCase().endsWith(".heif");
+
+  if (isHeic) {
+    try {
+      const converted = await heic2any({
+        blob: file,
+        toType: "image/jpeg",
+        quality: 0.9,
+      });
+      fileToUse = new File(
+        [converted as Blob],
+        file.name.replace(/\.heic$/i, ".jpg").replace(/\.heif$/i, ".jpg"),
+        { type: "image/jpeg" },
+      );
+    } catch (err) {
+      console.error("HEIC conversion failed:", err);
+    }
+  }
+
+  return {
+    previewUrl: URL.createObjectURL(fileToUse),
+    convertedFile: fileToUse,
+  };
+}
 
 export async function uploadListImage(
   listId: string,
   file: File,
 ): Promise<string> {
-  const fileExt = file.name.split(".").pop();
-  const filePath = `lists/${listId}/cover.${fileExt}`;
+  const compressed = await compressImage(file, 1, 1920); // max 1MB, 1920px
+  const filePath = `lists/${listId}/cover.webp`;
 
   // remove old image first if it exists
   await supabase.storage.from("images").remove([filePath]);
 
   const { error } = await supabase.storage
     .from("images")
-    .upload(filePath, file, { upsert: true });
+    .upload(filePath, compressed, { upsert: true });
 
   if (error) throw new Error(error.message);
 
@@ -20,12 +104,12 @@ export async function uploadListImage(
 }
 
 export async function uploadImage(path: string, file: File): Promise<string> {
-  const fileExt = file.name.split(".").pop();
-  const filePath = `${path}.${fileExt}`;
+  const compressed = await compressImage(file, 1, 1920);
+  const filePath = `${path}.webp`;
 
   const { error } = await supabase.storage
     .from("images")
-    .upload(filePath, file, { upsert: true });
+    .upload(filePath, compressed, { upsert: true });
 
   if (error) throw error;
   return filePath;
@@ -69,9 +153,9 @@ export async function uploadAvatar(
   userId: string,
   file: File,
 ): Promise<string> {
-  const fileExt = file.name.split(".").pop();
+  const compressed = await compressImage(file, 0.3, 400); // max 300KB, 400px — avatars are small
   const timestamp = Date.now();
-  const filePath = `avatars/${userId}/avatar_${timestamp}.${fileExt}`;
+  const filePath = `avatars/${userId}/avatar_${timestamp}.webp`;
 
   // remove all old avatars for this user first
   const { data: existing } = await supabase.storage
@@ -85,7 +169,7 @@ export async function uploadAvatar(
 
   const { error } = await supabase.storage
     .from("images")
-    .upload(filePath, file, { upsert: true });
+    .upload(filePath, compressed, { upsert: true });
 
   if (error) throw error;
   return filePath;

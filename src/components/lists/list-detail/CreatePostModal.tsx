@@ -10,6 +10,7 @@ import { type ListItem, type ListMemberWithProfile } from "../../../types";
 import Avatar from "../../common/Avatar";
 import styles from "./CreatePostModal.module.css";
 import clsx from "clsx";
+import { prepareImageForPreview } from "../../../lib/storage";
 
 type Props = {
   item: ListItem;
@@ -42,6 +43,7 @@ export default function CreatePostModal({
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageProcessing, setImageProcessing] = useState(false);
 
   const MAX_CHARS = 300;
   const eligibleMembers = listMembers.filter(
@@ -56,13 +58,19 @@ export default function CreatePostModal({
     );
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    setImageFile(file);
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setImagePreview(null);
+    if (!file) return;
+
+    try {
+      setImageProcessing(true);
+      const { previewUrl, convertedFile } = await prepareImageForPreview(file);
+      setImageFile(convertedFile);
+      setImagePreview(previewUrl);
+    } catch (err) {
+      setError("Failed to process image. Please try a different file.");
+    } finally {
+      setImageProcessing(false);
     }
   };
 
@@ -152,12 +160,27 @@ export default function CreatePostModal({
               </>
             ) : (
               <button
-                className={styles.imageUploadButton}
+                className={clsx(
+                  styles.imageUploadButton,
+                  imageFile && styles.imageSelected,
+                )}
                 onClick={() => document.getElementById("post-image")?.click()}
-                disabled={loading}
+                disabled={loading || imageProcessing}
               >
-                <HiPhoto size={18} />
-                Add a photo
+                {imageProcessing ? (
+                  <>
+                    <div
+                      className="spinner"
+                      style={{ width: 16, height: 16, borderWidth: 2 }}
+                    />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <HiPhoto size={18} />
+                    {imageFile ? imageFile.name : "Add a photo"}
+                  </>
+                )}
               </button>
             )}
             <input

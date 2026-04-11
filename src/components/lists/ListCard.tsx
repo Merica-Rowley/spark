@@ -6,6 +6,7 @@ import {
   HiEllipsisHorizontal,
   HiTrash,
   HiCheckCircle,
+  HiMiniRocketLaunch,
 } from "react-icons/hi2";
 import { type ListWithMeta } from "../../types";
 import AppImage from "../common/AppImage";
@@ -84,7 +85,21 @@ export default function ListCard({ list, onDeleteList, onToggleStar }: Props) {
 
         {/* Content */}
         <div className={styles.content}>
-          <p className={styles.title}>{list.title}</p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+            }}
+          >
+            <p className={styles.title}>{list.title}</p>
+            {list.role === "owner" && (
+              <span className={styles.ownerBadge}>
+                <HiMiniRocketLaunch size={10} />
+                Owner
+              </span>
+            )}
+          </div>
           <div className={styles.meta}>
             <span className={styles.itemCount}>
               <HiCheckCircle size={12} />

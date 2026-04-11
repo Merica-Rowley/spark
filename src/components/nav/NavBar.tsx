@@ -4,6 +4,7 @@ import ProfileDropdown from "./ProfileDropdown";
 import styles from "./NavBar.module.css";
 import clsx from "clsx";
 import { useAuth } from "../../context/AuthContext";
+import Logo from "../../assets/Logo";
 
 export default function NavBar() {
   const { profile } = useAuth();
@@ -13,8 +14,8 @@ export default function NavBar() {
       <div className={styles.navInner}>
         {/* Logo */}
         <NavLink to="/lists" className={styles.logo}>
-          {/* Replace src with your logo when ready */}
-          <span className={styles.logoText}>Spark ⚡</span>
+          <Logo size={32} />
+          <span className={styles.logoText}>Spark</span>
         </NavLink>
 
         {/* Nav links */}

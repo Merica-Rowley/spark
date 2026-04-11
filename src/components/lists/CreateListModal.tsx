@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { HiXMark, HiPhoto, HiCheck } from "react-icons/hi2";
 import { supabase } from "../../lib/supabaseClient";
-import { uploadListImage } from "../../lib/storage";
+import { prepareImageForPreview, uploadListImage } from "../../lib/storage";
 import { getFriends } from "../../lib/friends";
 import { addListMember } from "../../lib/lists";
 import { type Friend } from "../../types";
@@ -22,18 +22,25 @@ export default function CreateListModal({ onClose, onCreated }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<Friend[]>([]);
+  const [imageProcessing, setImageProcessing] = useState(false);
 
   useEffect(() => {
     getFriends().then(setFriends).catch(console.error);
   }, []);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    setImageFile(file);
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setImagePreview(null);
+    if (!file) return;
+
+    try {
+      setImageProcessing(true);
+      const { previewUrl, convertedFile } = await prepareImageForPreview(file);
+      setImageFile(convertedFile);
+      setImagePreview(previewUrl);
+    } catch (err) {
+      setError("Failed to process image. Please try a different file.");
+    } finally {
+      setImageProcessing(false);
     }
   };
 
@@ -133,10 +140,22 @@ export default function CreateListModal({ onClose, onCreated }: Props) {
                 onClick={() =>
                   document.getElementById("create-list-image")?.click()
                 }
-                disabled={loading}
+                disabled={loading || imageProcessing}
               >
-                <HiPhoto size={18} />
-                {imageFile ? imageFile.name : "Choose Cover Image"}
+                {imageProcessing ? (
+                  <>
+                    <div
+                      className="spinner"
+                      style={{ width: 16, height: 16, borderWidth: 2 }}
+                    />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <HiPhoto size={18} />
+                    {imageFile ? imageFile.name : "Choose Cover Image"}
+                  </>
+                )}
               </button>
               <input
                 id="create-list-image"

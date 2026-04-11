@@ -10,6 +10,7 @@ import { supabase } from "../lib/supabaseClient";
 import { acceptInvite } from "../lib/friends";
 import styles from "./LoginPage.module.css";
 import clsx from "clsx";
+import Logo from "../assets/Logo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -96,7 +97,9 @@ export default function LoginPage() {
       <div className={styles.container}>
         {/* Branding */}
         <div className={styles.branding}>
-          <div className={styles.logoPlaceholder}>⚡</div>
+          <div className={styles.logoPlaceholder}>
+            <Logo size={54} />
+          </div>
           <h1 className={styles.appName}>Spark</h1>
           <p className={styles.tagline}>
             Complete your bucket list together with the people who matter most.

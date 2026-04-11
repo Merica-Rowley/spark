@@ -4,6 +4,7 @@ import { type Profile } from "../../types";
 import Avatar from "../common/Avatar";
 import styles from "./EditProfileModal.module.css";
 import clsx from "clsx";
+import { prepareImageForPreview } from "../../lib/storage";
 
 type Props = {
   profile: Profile;
@@ -22,17 +23,24 @@ export default function EditProfileModal({ profile, onClose, onSaved }: Props) {
   const [removeAvatar, setRemoveAvatar] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageProcessing, setImageProcessing] = useState(false);
 
   const hasCustomAvatar = !!profile.avatar_url;
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    setImageFile(file);
-    setRemoveAvatar(false);
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setImagePreview(null);
+    if (!file) return;
+
+    try {
+      setImageProcessing(true);
+      const { previewUrl, convertedFile } = await prepareImageForPreview(file);
+      setImageFile(convertedFile);
+      setImagePreview(previewUrl);
+      setRemoveAvatar(false); // only needed in EditProfileModal and EditListModal
+    } catch (err) {
+      setError("Failed to process image. Please try a different file.");
+    } finally {
+      setImageProcessing(false);
     }
   };
 
@@ -111,10 +119,22 @@ export default function EditProfileModal({ profile, onClose, onSaved }: Props) {
                 onClick={() =>
                   document.getElementById("profile-avatar-upload")?.click()
                 }
-                disabled={loading}
+                disabled={loading || imageProcessing}
               >
-                <HiCamera size={16} />
-                {imageFile ? "Photo selected" : "Change Photo"}
+                {imageProcessing ? (
+                  <>
+                    <div
+                      className="spinner"
+                      style={{ width: 16, height: 16, borderWidth: 2 }}
+                    />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <HiCamera size={16} />
+                    {imageFile ? "Photo selected" : "Change Photo"}
+                  </>
+                )}
               </button>
               <input
                 id="profile-avatar-upload"
