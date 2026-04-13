@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { uploadImage } from "./storage";
+import { uploadImage, deleteImage } from "./storage";
 import { type ListMemberWithProfile, type PostWithMeta } from "../types";
 
 export async function createPost(
@@ -30,6 +30,18 @@ export async function createPost(
 }
 
 export async function deletePost(postId: string): Promise<void> {
+  const { data, error: fetchError } = await supabase
+    .from("posts")
+    .select("image_url")
+    .eq("id", postId)
+    .single();
+
+  if (fetchError) throw new Error(fetchError.message);
+
+  if (data?.image_url) {
+    await deleteImage(data.image_url);
+  }
+
   const { error } = await supabase.rpc("delete_post", {
     p_post_id: postId,
   });
