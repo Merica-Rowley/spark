@@ -48,7 +48,9 @@ export default function LoginPage() {
   // }
 
   async function handlePendingInvite() {
+    console.log("handlePendingInvite called");
     const pendingCode = localStorage.getItem("pendingInviteCode");
+    console.log("pendingCode:", pendingCode);
     if (!pendingCode) {
       navigate("/lists");
       return;
@@ -87,20 +89,45 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  // const signIn = async (): Promise<void> => {
+  //   setLoading(true);
+  //   setError(null);
+  //   setSuccessMessage(null);
+
+  //   const { error } = await supabase.auth.signInWithPassword({
+  //     email,
+  //     password,
+  //   });
+
+  //   if (error) {
+  //     setError(error.message);
+  //     setLoading(false);
+  //   } else {
+  //     await handlePendingInvite();
+  //   }
+  // };
+
   const signIn = async (): Promise<void> => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
+    console.log("signIn called");
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
+    console.log(
+      "signIn result:",
+      error ? "error: " + error.message : "success",
+    );
+
     if (error) {
       setError(error.message);
       setLoading(false);
     } else {
+      console.log("calling handlePendingInvite");
       await handlePendingInvite();
     }
   };
