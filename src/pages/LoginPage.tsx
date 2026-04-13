@@ -31,6 +31,22 @@ export default function LoginPage() {
     setSuccessMessage(null);
   };
 
+  // async function handlePendingInvite() {
+  //   const pendingCode = localStorage.getItem("pendingInviteCode");
+  //   if (!pendingCode) {
+  //     navigate("/lists");
+  //     return;
+  //   }
+  //   try {
+  //     await acceptInvite(pendingCode);
+  //     localStorage.removeItem("pendingInviteCode");
+  //     navigate("/friends");
+  //   } catch {
+  //     localStorage.removeItem("pendingInviteCode");
+  //     navigate("/lists");
+  //   }
+  // }
+
   async function handlePendingInvite() {
     const pendingCode = localStorage.getItem("pendingInviteCode");
     if (!pendingCode) {
@@ -38,11 +54,15 @@ export default function LoginPage() {
       return;
     }
     try {
+      console.log("Attempting to accept invite:", pendingCode);
       await acceptInvite(pendingCode);
       localStorage.removeItem("pendingInviteCode");
+      console.log("Invite accepted successfully");
       navigate("/friends");
-    } catch {
-      localStorage.removeItem("pendingInviteCode");
+    } catch (err) {
+      console.error("Failed to accept invite:", err);
+      // don't remove the code on failure so user can retry
+      // localStorage.removeItem("pendingInviteCode");
       navigate("/lists");
     }
   }

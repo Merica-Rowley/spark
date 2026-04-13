@@ -21,3 +21,4 @@
 | 4/8  | Fixing email signin flow and app routing, bug fixes and minor changes to layouts, a bit of refactoring            | 3.5 hours  |
 | 4/10 | Fix quick add list grid update, CSS styling, make confirm messages look nice                                      | 4.25 hours |
 | 4/11 | Fix image storage (now compresses images), logo, some CSS fixes                                                   | 4 hours    |
+| 4/12 | Fix random bugs, demo prep                                                                                        | 1.5 hours  |
