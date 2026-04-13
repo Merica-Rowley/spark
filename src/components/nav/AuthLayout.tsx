@@ -6,6 +6,7 @@ import { type Profile } from "../../types";
 import NavBar from "./NavBar";
 import { AuthProvider } from "../../context/AuthContext";
 import styles from "./AuthLayout.module.css";
+import { acceptInvite } from "../../lib/friends";
 
 type Props = {
   children: React.ReactNode;
@@ -53,6 +54,20 @@ export default function AuthLayout({ children }: Props) {
       const profileData = await getProfile();
       setProfile(profileData);
       setAuthenticated(true);
+
+      // check for pending invite after any successful authentication
+      const pendingCode = localStorage.getItem("pendingInviteCode");
+      if (pendingCode) {
+        try {
+          await acceptInvite(pendingCode);
+          localStorage.removeItem("pendingInviteCode");
+          // don't navigate here — AuthLayout will handle routing normally
+          // the invite is accepted silently in the background
+        } catch {
+          // invite may have expired or already been used
+          localStorage.removeItem("pendingInviteCode");
+        }
+      }
     } catch {
       setAuthenticated(false);
     } finally {
