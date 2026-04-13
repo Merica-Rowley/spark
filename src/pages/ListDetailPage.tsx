@@ -11,6 +11,8 @@ import EditListModal from "../components/lists/list-detail/EditListModal";
 import ManageMembersModal from "../components/lists/list-detail/ManageMembersModal";
 import styles from "./ListDetailPage.module.css";
 import { HiChevronLeft } from "react-icons/hi";
+import { useConfirm } from "../hooks/useConfirm";
+import ConfirmModal from "../components/common/ConfirmModal";
 
 export default function ListDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +34,7 @@ export default function ListDetailPage() {
     createItemPost,
     deleteItemPost,
   } = useListDetail(id!);
+  const { confirm, options, handleConfirm, handleCancel } = useConfirm();
 
   const [postModalItem, setPostModalItem] = useState<ListItem | null>(null);
   const [completedModalItem, setCompletedModalItem] = useState<ListItem | null>(
@@ -58,7 +61,14 @@ export default function ListDetailPage() {
 
   const handleLeaveList = async () => {
     if (!currentUserId) return;
-    if (!confirm("Are you sure you want to leave this list?")) return;
+    const confirmed = await confirm({
+      title: "Leave List",
+      message:
+        "Are you sure you want to leave this list? You will need to be re-invited to rejoin.",
+      confirmLabel: "Leave",
+      variant: "danger",
+    });
+    if (!confirmed) return;
     await removeMember(currentUserId);
     navigate("/lists");
   };
@@ -152,6 +162,14 @@ export default function ListDetailPage() {
           onRemoveMember={removeMember}
           onTransferOwnership={transferOwnership}
           getAvailableFriends={getAvailableFriends}
+        />
+      )}
+
+      {options && (
+        <ConfirmModal
+          {...options}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
         />
       )}
     </div>
