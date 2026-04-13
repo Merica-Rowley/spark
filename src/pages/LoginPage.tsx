@@ -32,17 +32,17 @@ export default function LoginPage() {
   };
 
   async function handlePendingInvite() {
-    const pendingCode = sessionStorage.getItem("pendingInviteCode");
+    const pendingCode = localStorage.getItem("pendingInviteCode");
     if (!pendingCode) {
       navigate("/lists");
       return;
     }
     try {
       await acceptInvite(pendingCode);
-      sessionStorage.removeItem("pendingInviteCode");
+      localStorage.removeItem("pendingInviteCode");
       navigate("/friends");
     } catch {
-      sessionStorage.removeItem("pendingInviteCode");
+      localStorage.removeItem("pendingInviteCode");
       navigate("/lists");
     }
   }
@@ -57,7 +57,7 @@ export default function LoginPage() {
     if (error) {
       setError(error.message);
     } else {
-      const hasPendingInvite = !!sessionStorage.getItem("pendingInviteCode");
+      const hasPendingInvite = !!localStorage.getItem("pendingInviteCode");
       setSuccessMessage(
         hasPendingInvite
           ? "Check your email to confirm your account! Your friend invite will be waiting when you log in."

@@ -50,7 +50,7 @@ export default function InvitePage() {
         setIsAuthenticated(true);
         setStatus("ready");
       } else {
-        sessionStorage.setItem("pendingInviteCode", code!);
+        localStorage.setItem("pendingInviteCode", code!);
         setStatus("ready");
       }
     } catch (err) {
@@ -63,7 +63,7 @@ export default function InvitePage() {
     try {
       setStatus("loading");
       await acceptInvite(code!);
-      sessionStorage.removeItem("pendingInviteCode");
+      localStorage.removeItem("pendingInviteCode");
       setStatus("success");
       setTimeout(() => navigate("/friends"), 2500);
     } catch (err) {
@@ -79,7 +79,7 @@ export default function InvitePage() {
         <div className={styles.container}>
           <div className={styles.branding}>
             <div className={styles.logoPlaceholder}>
-              <Logo size={48} />
+              <Logo size={54} />
             </div>
             <h1 className={styles.appName}>Spark</h1>
           </div>
