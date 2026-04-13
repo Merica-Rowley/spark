@@ -107,7 +107,9 @@ export default function InvitePage() {
       <div className={styles.page}>
         <div className={styles.container}>
           <div className={styles.branding}>
-            <div className={styles.logoPlaceholder}>⚡</div>
+            <div className={styles.logoPlaceholder}>
+              <Logo size={54} />
+            </div>
             <h1 className={styles.appName}>Spark</h1>
           </div>
           <div className={styles.card}>
@@ -138,7 +140,9 @@ export default function InvitePage() {
       <div className={styles.page}>
         <div className={styles.container}>
           <div className={styles.branding}>
-            <div className={styles.logoPlaceholder}>⚡</div>
+            <div className={styles.logoPlaceholder}>
+              <Logo size={54} />
+            </div>
             <h1 className={styles.appName}>Spark</h1>
           </div>
           <div className={styles.card}>
@@ -165,7 +169,9 @@ export default function InvitePage() {
       <div className={styles.page}>
         <div className={styles.container}>
           <div className={styles.branding}>
-            <div className={styles.logoPlaceholder}>⚡</div>
+            <div className={styles.logoPlaceholder}>
+              <Logo size={54} />
+            </div>
             <h1 className={styles.appName}>Spark</h1>
           </div>
           <div className={styles.card}>
@@ -214,7 +220,9 @@ export default function InvitePage() {
     <div className={styles.page}>
       <div className={styles.container}>
         <div className={styles.branding}>
-          <div className={styles.logoPlaceholder}>⚡</div>
+          <div className={styles.logoPlaceholder}>
+            <Logo size={54} />
+          </div>
           <h1 className={styles.appName}>Spark</h1>
         </div>
         <div className={styles.card}>

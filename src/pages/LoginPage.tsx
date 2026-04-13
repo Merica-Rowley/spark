@@ -31,40 +31,18 @@ export default function LoginPage() {
     setSuccessMessage(null);
   };
 
-  // async function handlePendingInvite() {
-  //   const pendingCode = localStorage.getItem("pendingInviteCode");
-  //   if (!pendingCode) {
-  //     navigate("/lists");
-  //     return;
-  //   }
-  //   try {
-  //     await acceptInvite(pendingCode);
-  //     localStorage.removeItem("pendingInviteCode");
-  //     navigate("/friends");
-  //   } catch {
-  //     localStorage.removeItem("pendingInviteCode");
-  //     navigate("/lists");
-  //   }
-  // }
-
   async function handlePendingInvite() {
-    console.log("handlePendingInvite called");
     const pendingCode = localStorage.getItem("pendingInviteCode");
-    console.log("pendingCode:", pendingCode);
     if (!pendingCode) {
       navigate("/lists");
       return;
     }
     try {
-      console.log("Attempting to accept invite:", pendingCode);
       await acceptInvite(pendingCode);
       localStorage.removeItem("pendingInviteCode");
-      console.log("Invite accepted successfully");
       navigate("/friends");
     } catch (err) {
-      console.error("Failed to accept invite:", err);
-      // don't remove the code on failure so user can retry
-      // localStorage.removeItem("pendingInviteCode");
+      localStorage.removeItem("pendingInviteCode");
       navigate("/lists");
     }
   }
@@ -89,45 +67,20 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  // const signIn = async (): Promise<void> => {
-  //   setLoading(true);
-  //   setError(null);
-  //   setSuccessMessage(null);
-
-  //   const { error } = await supabase.auth.signInWithPassword({
-  //     email,
-  //     password,
-  //   });
-
-  //   if (error) {
-  //     setError(error.message);
-  //     setLoading(false);
-  //   } else {
-  //     await handlePendingInvite();
-  //   }
-  // };
-
   const signIn = async (): Promise<void> => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
-    console.log("signIn called");
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    console.log(
-      "signIn result:",
-      error ? "error: " + error.message : "success",
-    );
-
     if (error) {
       setError(error.message);
       setLoading(false);
     } else {
-      console.log("calling handlePendingInvite");
       await handlePendingInvite();
     }
   };

@@ -61,10 +61,7 @@ export default function AuthLayout({ children }: Props) {
         try {
           await acceptInvite(pendingCode);
           localStorage.removeItem("pendingInviteCode");
-          // don't navigate here — AuthLayout will handle routing normally
-          // the invite is accepted silently in the background
         } catch {
-          // invite may have expired or already been used
           localStorage.removeItem("pendingInviteCode");
         }
       }
