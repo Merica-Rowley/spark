@@ -73,7 +73,11 @@ export default function ListCard({ list, onDeleteList, onToggleStar }: Props) {
   return (
     <>
       <div
-        className={clsx(styles.card, list.is_starred && styles.cardStarred)}
+        className={clsx(
+          styles.card,
+          list.is_starred && styles.cardStarred,
+          menuOpen && styles.cardMenuOpen,
+        )}
         onClick={handleCardClick}
       >
         {/* Thumbnail */}

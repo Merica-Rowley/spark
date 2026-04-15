@@ -146,6 +146,10 @@
   animation: dropdownIn var(--transition-fast) ease;
 }
 
+.cardMenuOpen {
+  z-index: var(--z-dropdown);
+}
+
 @keyframes dropdownIn {
   from {
     opacity: 0;
