@@ -4,7 +4,10 @@ import {
   HiLockClosed,
   HiTrash,
   HiInformationCircle,
+  HiArrowRightOnRectangle,
 } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
 import { useTheme } from "../context/ThemeContext";
 import styles from "./SettingsPage.module.css";
 import clsx from "clsx";
@@ -12,6 +15,12 @@ import clsx from "clsx";
 export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
 
   return (
     <div className={styles.page}>
@@ -107,6 +116,31 @@ export default function SettingsPage() {
               Version
             </span>
             <span className={styles.settingDescription}>Spark Beta 0.1.0</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Sign Out */}
+      <div className={styles.section}>
+        <p className={styles.sectionTitle}>Session</p>
+        <div
+          className={clsx(styles.settingRow, styles.settingRowClickable)}
+          onClick={handleSignOut}
+        >
+          <div className={styles.settingInfo}>
+            <span
+              className={styles.settingLabel}
+              style={{ color: "var(--color-error)" }}
+            >
+              <HiArrowRightOnRectangle
+                size={14}
+                style={{ display: "inline", marginRight: 6 }}
+              />
+              Sign Out
+            </span>
+            <span className={styles.settingDescription}>
+              Sign out of your Spark account
+            </span>
           </div>
         </div>
       </div>
