@@ -1,5 +1,7 @@
 # Spark 🚀
 
+[Work Log](log.md)
+
 ### Project Summary
 
 Spark is a social media app combined with a bucket list app. Users can create bucket lists, check off items, collaborate with friends, and post their accomplishments as they complete items from their lists.
