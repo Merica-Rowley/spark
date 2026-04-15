@@ -140,6 +140,6 @@
   }
 
   .mobileOnly {
-    display: flex;
+    display: flex !important;
   }
 }
