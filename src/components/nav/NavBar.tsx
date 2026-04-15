@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { HiHome, HiNewspaper, HiUserGroup } from "react-icons/hi2";
 import { useAuth } from "../../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
@@ -9,8 +9,6 @@ import Avatar from "../common/Avatar";
 
 export default function NavBar() {
   const { profile } = useAuth();
-  const location = useLocation();
-  const isProfileActive = location.pathname === "/profile";
 
   return (
     <nav className={styles.nav}>
