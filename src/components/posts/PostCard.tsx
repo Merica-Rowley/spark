@@ -67,6 +67,15 @@ export default function PostCard({
   };
 
   const handleRemoveSelf = async () => {
+    const confirmed = await confirm({
+      title: "Remove Yourself from Post",
+      message:
+        "Are you sure you want to remove yourself from this post? You will no longer appear as a participant.",
+      confirmLabel: "Remove Me",
+      variant: "danger",
+    });
+    if (!confirmed) return;
+
     try {
       await removePostParticipant(post.post_id, currentUserId);
       const updated = await getPostById(post.post_id);
