@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HiPencil, HiPhoto } from "react-icons/hi2";
+import { HiPencil, HiPhoto, HiCog6Tooth } from "react-icons/hi2";
 import { useProfile } from "../hooks/useProfile";
 import { useProfilePosts } from "../hooks/useProfilePosts";
 import { deletePost } from "../lib/posts";
@@ -8,10 +8,13 @@ import PostCard from "../components/posts/PostCard";
 import EditProfileModal from "../components/profile/EditProfileModal";
 import styles from "./ProfilePage.module.css";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import clsx from "clsx";
 
 export default function ProfilePage() {
   const { loading, error, updateProfile } = useProfile();
   const [showEditModal, setShowEditModal] = useState(false);
+  const navigate = useNavigate();
 
   const { profile } = useAuth();
 
@@ -70,7 +73,14 @@ export default function ProfilePage() {
           <p className={styles.joinDate}>Member since {joinDate}</p>
         </div>
 
-        <div className={styles.editButton}>
+        <div style={{ display: "flex", gap: "var(--space-2)" }}>
+          <button
+            className={clsx("btn btn-ghost btn-sm", styles.mobileOnly)}
+            onClick={() => navigate("/settings")}
+          >
+            <HiCog6Tooth size={16} />
+            Settings
+          </button>
           <button
             className="btn btn-ghost btn-sm"
             onClick={() => setShowEditModal(true)}

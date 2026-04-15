@@ -123,6 +123,10 @@
   color: var(--color-error);
 }
 
+.mobileOnly {
+  display: none !important;
+}
+
 @media (max-width: 768px) {
   .profileHeader {
     flex-direction: column;
@@ -133,5 +137,9 @@
 
   .editButton {
     align-self: center;
+  }
+
+  .mobileOnly {
+    display: flex;
   }
 }
