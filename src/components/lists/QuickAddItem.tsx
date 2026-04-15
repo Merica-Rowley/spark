@@ -68,7 +68,7 @@ export default function QuickAddItem({ lists, onItemAdded }: Props) {
   return (
     <div>
       <div className={styles.container}>
-        {/* Custom dropdown */}
+        {/* Dropdown — below input on mobile, left of input on desktop */}
         <div ref={dropdownRef} className={styles.selectWrapper}>
           <button
             className={styles.selectTrigger}
@@ -105,25 +105,25 @@ export default function QuickAddItem({ lists, onItemAdded }: Props) {
           )}
         </div>
 
-        {/* Input */}
-        <input
-          className={styles.input}
-          type="text"
-          placeholder="Add an item to this list..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={loading}
-        />
-
-        {/* Submit button */}
-        <button
-          className={styles.submitButton}
-          onClick={handleSubmit}
-          disabled={loading || !content.trim() || !selectedListId}
-        >
-          <HiPlus size={20} />
-        </button>
+        {/* Input row — always on top on mobile */}
+        <div className={styles.inputRow}>
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="Add an item to this list..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={loading}
+          />
+          <button
+            className={styles.submitButton}
+            onClick={handleSubmit}
+            disabled={loading || !content.trim() || !selectedListId}
+          >
+            <HiPlus size={20} />
+          </button>
+        </div>
       </div>
 
       {success && (

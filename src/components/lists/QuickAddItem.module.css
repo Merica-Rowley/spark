@@ -172,3 +172,59 @@
 .selectOptionSelected:hover {
   background: var(--color-accent-secondary-light);
 }
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .inputRow {
+    width: 100%;
+    order: 1;
+  }
+
+  .selectWrapper {
+    order: 2;
+    width: 100%;
+    border-right: none;
+    border-top: 1.5px solid var(--color-border);
+    padding-top: var(--space-2);
+  }
+
+  .container {
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .selectTrigger {
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
+    height: 44px;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: none;
+  }
+
+  .selectDropdown {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .input {
+    height: 44px;
+    font-size: var(--text-md);
+    order: 1; /* input goes on top */
+    flex: 1;
+  }
+
+  .submitButton {
+    width: 44px;
+    height: 44px;
+    order: 1; /* stays with input */
+    flex-shrink: 0;
+  }
+}

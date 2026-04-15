@@ -185,12 +185,6 @@
   background: var(--color-error-light);
 }
 
-@media (max-width: 768px) {
-  .progressBar {
-    display: none;
-  }
-}
-
 .ownerBadge {
   display: inline-flex;
   align-items: center;
@@ -203,4 +197,41 @@
   font-weight: var(--font-semibold);
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-3);
+  }
+
+  .content {
+    /* prevent badge from pushing title off */
+    overflow: hidden;
+  }
+
+  .title {
+    font-size: var(--text-sm);
+  }
+
+  /* hide owner badge on mobile to save space
+     ownership is indicated by the ... menu */
+  .ownerBadge {
+    display: none;
+  }
+
+  /* bigger touch targets for action buttons */
+  .starButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  .menuButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* hide progress bar on mobile to save space */
+  .progressBar {
+    display: none;
+  }
 }

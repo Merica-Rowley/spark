@@ -35,3 +35,9 @@
   color: var(--color-text-secondary);
   max-width: 280px;
 }
+
+@media (max-width: 768px) {
+  .container {
+    gap: var(--space-2);
+  }
+}
