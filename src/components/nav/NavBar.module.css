@@ -28,12 +28,6 @@
   flex-shrink: 0;
 }
 
-.logoImage {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-
 .logoText {
   font-family: var(--font-heading);
   font-size: var(--text-xl);
@@ -90,35 +84,149 @@
 /* Mobile nav (bottom bar) */
 @media (max-width: 768px) {
   .nav {
-    position: fixed; /* fixed instead of sticky for bottom nav */
+    /* move to bottom */
+    position: fixed;
+    top: auto;
     bottom: 0;
     left: 0;
     right: 0;
-    top: auto;
+    height: 64px;
     border-top: 1px solid var(--color-border);
     border-bottom: none;
+    box-shadow: 0 -2px 8px rgba(14, 19, 47, 0.06);
+    /* safe area for iPhone home indicator */
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .navInner {
-    padding: 0 var(--space-4);
+    padding: 0;
+    gap: 0;
+    height: 64px;
   }
 
-  .logoText {
+  .logo {
+    display: none;
+  }
+
+  .navRight {
     display: none;
   }
 
   .navLinks {
+    flex: 1;
     gap: 0;
-  }
-
-  .navLink span {
-    display: none; /* hide text labels on mobile, keep icons */
+    justify-content: stretch;
+    height: 100%;
+    align-items: stretch;
   }
 
   .navLink {
-    padding: var(--space-2);
+    flex: 1;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: var(--space-1);
-    font-size: var(--text-xs);
+    padding: var(--space-1) 0;
+    border-radius: 0;
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    height: 100%;
+  }
+
+  .navLink:hover {
+    background: transparent;
+    color: var(--color-text-primary);
+  }
+
+  .navLinkActive {
+    background: transparent;
+    color: var(--color-accent-primary);
+  }
+
+  .navLinkActive:hover {
+    background: transparent;
+    color: var(--color-accent-primary);
+  }
+
+  .navLinkLabel {
+    font-size: 10px;
+    font-weight: var(--font-semibold);
+    line-height: 1;
+  }
+
+  .navLinkActive::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: var(--color-accent-primary);
+    border-radius: 0 0 var(--radius-full) var(--radius-full);
+  }
+
+  .navLink {
+    position: relative;
+  }
+
+  .mobileProfileTab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    padding: var(--space-1) 0;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    height: 100%;
+    position: relative;
+    transition: color var(--transition-base);
+  }
+
+  .mobileProfileTabActive {
+    color: var(--color-accent-primary);
+  }
+
+  .mobileProfileTabActive::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: var(--color-accent-primary);
+    border-radius: 0 0 var(--radius-full) var(--radius-full);
+  }
+
+  .mobileAvatarWrapper {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color var(--transition-base);
+  }
+
+  .mobileProfileTabActive .mobileAvatarWrapper {
+    border-color: var(--color-accent-primary);
+  }
+}
+
+/* hide mobile profile tab on desktop */
+.mobileProfileTab {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileProfileTab {
+    display: flex;
   }
 }
